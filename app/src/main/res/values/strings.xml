@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Exam</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirm_submission">Confirm Submission</string>
+    <string name="confirm_inst">Please confirm that you are ready to submit. Cancel to review</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+</resources>

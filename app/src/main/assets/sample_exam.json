@@ -1,0 +1,404 @@
+[
+  {
+    "archived": false,
+    "country": "KE",
+    "created_by": null,
+    "date_created": "Tue, 12 Jun 2018 09:47:14 GMT",
+    "exam_status": null,
+    "exam_status_id": null,
+    "id": 8,
+    "passmark": null,
+    "questions": [
+      {
+        "allocated_marks": 5,
+        "archived": false,
+        "batch_id": "dd624899-2765-49bb-935e-3d777efdc878",
+        "choices": [
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 64,
+            "is_answer": false,
+            "question_choice": "Eldoret",
+            "question_id": 17
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 65,
+            "is_answer": true,
+            "question_choice": "Nairobi",
+            "question_id": 17
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 66,
+            "is_answer": false,
+            "question_choice": "Kisumu",
+            "question_id": 17
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 67,
+            "is_answer": false,
+            "question_choice": "Mombasa",
+            "question_id": 17
+          }
+        ],
+        "country": "KE",
+        "created_by": null,
+        "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+        "id": 17,
+        "question": "Where is the HQ located",
+        "question_type_id": null,
+        "topics": [
+        ],
+        "type": null
+      },
+      {
+        "allocated_marks": 2,
+        "archived": false,
+        "batch_id": null,
+        "choices": [
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 68,
+            "is_answer": true,
+            "question_choice": "Nairobi",
+            "question_id": 2
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 69,
+            "is_answer": false,
+            "question_choice": "Addis Ababa",
+            "question_id": 2
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 70,
+            "is_answer": false,
+            "question_choice": "Kampala",
+            "question_id": 2
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 71,
+            "is_answer": false,
+            "question_choice": "Dodoma",
+            "question_id": 2
+          }
+        ],
+        "country": "KE",
+        "created_by": null,
+        "date_created": "Mon, 28 May 2018 08:22:20 GMT",
+        "id": 2,
+        "question": "What is the capital city of Kenya",
+        "question_type_id": null,
+        "topics": [
+          {
+            "added_by": 2,
+            "archived": 0,
+            "country": "KE",
+            "date_added": "Tue, 12 Jun 2018 09:24:28 GMT",
+            "id": 3,
+            "name": "Capital City"
+          }
+        ],
+        "type": null
+      },
+      {
+        "allocated_marks": 3,
+        "archived": false,
+        "batch_id": "93bd7fc8-d629-42ca-8b33-a29add3cb4f3",
+        "choices": [
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 44,
+            "is_answer": false,
+            "question_choice": "Come Home Visitor",
+            "question_id": 12
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 45,
+            "is_answer": false,
+            "question_choice": "Community Home Visitor",
+            "question_id": 12
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 46,
+            "is_answer": false,
+            "question_choice": "Common Health Villages",
+            "question_id": 12
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 47,
+            "is_answer": true,
+            "question_choice": "Community Health Volunteers",
+            "question_id": 12
+          }
+        ],
+        "country": "KE",
+        "created_by": null,
+        "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+        "id": 12,
+        "question": "What does the initials CHV stand for?",
+        "question_type_id": null,
+        "topics": [
+        ],
+        "type": null
+      }
+    ],
+    "title": "Thika ICCM Exam 20-May"
+  },
+  {
+    "archived": false,
+    "country": "KE",
+    "created_by": null,
+    "date_created": "Tue, 12 Jun 2018 09:47:14 GMT",
+    "exam_status": null,
+    "exam_status_id": null,
+    "id": 8,
+    "passmark": null,
+    "questions": [
+      {
+        "allocated_marks": 5,
+        "archived": false,
+        "batch_id": "dd624899-2765-49bb-935e-3d777efdc878",
+        "choices": [
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 64,
+            "is_answer": false,
+            "question_choice": "Eldoret",
+            "question_id": 17
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 65,
+            "is_answer": true,
+            "question_choice": "Nairobi",
+            "question_id": 17
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 66,
+            "is_answer": false,
+            "question_choice": "Kisumu",
+            "question_id": 17
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+            "id": 67,
+            "is_answer": false,
+            "question_choice": "Mombasa",
+            "question_id": 17
+          }
+        ],
+        "country": "KE",
+        "created_by": null,
+        "date_created": "Tue, 12 Jun 2018 09:10:32 GMT",
+        "id": 17,
+        "question": "Where is the HQ located",
+        "question_type_id": null,
+        "topics": [
+        ],
+        "type": null
+      },
+      {
+        "allocated_marks": 2,
+        "archived": false,
+        "batch_id": null,
+        "choices": [
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 68,
+            "is_answer": true,
+            "question_choice": "Nairobi",
+            "question_id": 2
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 69,
+            "is_answer": false,
+            "question_choice": "Addis Ababa",
+            "question_id": 2
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 70,
+            "is_answer": false,
+            "question_choice": "Kampala",
+            "question_id": 2
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 09:24:57 GMT",
+            "id": 71,
+            "is_answer": false,
+            "question_choice": "Dodoma",
+            "question_id": 2
+          }
+        ],
+        "country": "KE",
+        "created_by": null,
+        "date_created": "Mon, 28 May 2018 08:22:20 GMT",
+        "id": 2,
+        "question": "What is the capital city of Kenya",
+        "question_type_id": null,
+        "topics": [
+          {
+            "added_by": 2,
+            "archived": 0,
+            "country": "KE",
+            "date_added": "Tue, 12 Jun 2018 09:24:28 GMT",
+            "id": 3,
+            "name": "Capital City"
+          }
+        ],
+        "type": null
+      },
+      {
+        "allocated_marks": 3,
+        "archived": false,
+        "batch_id": "93bd7fc8-d629-42ca-8b33-a29add3cb4f3",
+        "choices": [
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 44,
+            "is_answer": false,
+            "question_choice": "Come Home Visitor",
+            "question_id": 12
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 45,
+            "is_answer": false,
+            "question_choice": "Community Home Visitor",
+            "question_id": 12
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 46,
+            "is_answer": false,
+            "question_choice": "Common Health Villages",
+            "question_id": 12
+          },
+          {
+            "allocated_marks": null,
+            "archived": false,
+            "country": "KE",
+            "created_by": null,
+            "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+            "id": 47,
+            "is_answer": true,
+            "question_choice": "Community Health Volunteers",
+            "question_id": 12
+          }
+        ],
+        "country": "KE",
+        "created_by": null,
+        "date_created": "Tue, 12 Jun 2018 08:35:27 GMT",
+        "id": 12,
+        "question": "What does the initials CHV stand for?",
+        "question_type_id": null,
+        "topics": [
+        ],
+        "type": null
+      }
+    ],
+    "title": "Thika ICCM Exam 20-May"
+  }
+]
