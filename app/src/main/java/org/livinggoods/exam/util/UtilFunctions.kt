@@ -3,10 +3,21 @@ package org.livinggoods.exam.util
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import java.io.FileNotFoundException
 import java.io.IOException
 
 object UtilFunctions {
+
+    fun getGsonSerializer(): Gson {
+
+        val gson = GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create()
+
+        return gson
+    }
 
     fun getJsonFromAssets(context: Context, filename: String): String? {
 

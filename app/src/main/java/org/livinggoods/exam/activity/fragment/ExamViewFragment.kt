@@ -40,7 +40,7 @@ class ExamViewFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        gson = Gson()
+        gson = UtilFunctions.getGsonSerializer()
 
         if (arguments != null) {
 

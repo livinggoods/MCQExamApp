@@ -2,8 +2,9 @@ package org.livinggoods.exam.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.orm.SugarRecord
 
-class Exam {
+class Exam(): SugarRecord<Exam>() {
 
     @SerializedName("archived")
     @Expose
@@ -35,5 +36,9 @@ class Exam {
     @SerializedName("title")
     @Expose
     var title: String? = null
+
+    @SerializedName("local_exam_status")
+    @Expose
+    var localExamStatus: String? = null
 
 }

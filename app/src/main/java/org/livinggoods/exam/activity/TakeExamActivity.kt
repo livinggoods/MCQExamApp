@@ -50,7 +50,7 @@ class TakeExamActivity : AppCompatActivity(), ExamViewFragment.OnFragmentInterac
 
     override fun getExamJSON(): Exam {
         val json = UtilFunctions.getJsonFromAssets(this, "sample_exam.json")
-        val gson = Gson()
+        val gson = UtilFunctions.getGsonSerializer()
         val listType = object : TypeToken<ArrayList<Exam>>() {}.type
         val model = gson.fromJson<MutableList<Exam>>(json, listType)
 

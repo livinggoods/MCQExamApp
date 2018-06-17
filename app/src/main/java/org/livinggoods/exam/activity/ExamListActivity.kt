@@ -38,7 +38,7 @@ class ExamListActivity : AppCompatActivity() {
     fun getExamList(): MutableList<Exam>? {
         val json = UtilFunctions.getJsonFromAssets(this, "sample_exam.json")
         if (json == null) return null
-        val gson = Gson()
+        val gson = UtilFunctions.getGsonSerializer()
         val listType = object : TypeToken<ArrayList<Exam>>() {}.type
         val model = gson.fromJson<MutableList<Exam>>(json, listType)
         return model

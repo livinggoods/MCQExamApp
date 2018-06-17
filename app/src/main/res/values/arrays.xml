@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="trainings">
+        <item>Training 1</item>
+        <item>Training 2</item>
+        <item>Training 3</item>
+        <item>Training 4</item>
+        <item>Training 5</item>
+    </string-array>
+
+
+    <string-array name="trainees">
+        <item>Trainee 1</item>
+        <item>Trainee 2</item>
+        <item>Trainee 3</item>
+        <item>Trainee 4</item>
+        <item>Trainee 5</item>
+    </string-array>
+
+</resources>

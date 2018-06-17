@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.InitialSetupActivity"
+    android:padding="16dp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/training"/>
+
+    <Spinner
+        android:id="@+id/sp_training"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/trainings"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/trainee"
+        android:layout_marginTop="16dp"/>
+
+    <Spinner
+        android:id="@+id/sp_trainees"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/trainees"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        />
+
+</LinearLayout>
