@@ -8,6 +8,7 @@ import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.livinggoods.exam.util.UtilFunctions
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
@@ -26,7 +27,7 @@ object APIClient {
 
     fun getClient(context: Context): Retrofit {
 
-        val ENDPOINT = ""
+        val BASE_URL = "http://10.0.3.2:5000/api/v1/"
 
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
@@ -38,11 +39,11 @@ object APIClient {
                 .cache(provideCache(context))
                 .build()
 
-        val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+        val gson = UtilFunctions.getGsonSerializer()
 
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
-                    .baseUrl(ENDPOINT)
+                    .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(httpClient)
                     .build()

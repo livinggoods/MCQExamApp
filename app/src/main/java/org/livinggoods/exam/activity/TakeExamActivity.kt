@@ -1,19 +1,15 @@
 package org.livinggoods.exam.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
-import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.livinggoods.exam.R
 import org.livinggoods.exam.activity.fragment.ExamViewFragment
 import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.UtilFunctions
 
-class TakeExamActivity : AppCompatActivity(), ExamViewFragment.OnFragmentInteractionListener {
+class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionListener {
 
     lateinit var btnSubmit: Button
 
@@ -50,7 +46,7 @@ class TakeExamActivity : AppCompatActivity(), ExamViewFragment.OnFragmentInterac
 
     override fun getExamJSON(): Exam {
         val json = UtilFunctions.getJsonFromAssets(this, "sample_exam.json")
-        val gson = Gson()
+        val gson = UtilFunctions.getGsonSerializer()
         val listType = object : TypeToken<ArrayList<Exam>>() {}.type
         val model = gson.fromJson<MutableList<Exam>>(json, listType)
 

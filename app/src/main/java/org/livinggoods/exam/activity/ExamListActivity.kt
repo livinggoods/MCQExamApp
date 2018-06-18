@@ -1,26 +1,34 @@
 package org.livinggoods.exam.activity
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ListView
-import com.google.gson.Gson
 import org.livinggoods.exam.R
 import org.livinggoods.exam.activity.adapter.ExamListAdapter
 import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.UtilFunctions
 import com.google.gson.reflect.TypeToken
+import org.livinggoods.exam.persistence.SessionManager
 
 
-
-class ExamListActivity : AppCompatActivity() {
+class ExamListActivity : BaseActivity() {
 
     lateinit var lvExams: ListView
     lateinit var adapter: ExamListAdapter
+    lateinit var session: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        session = SessionManager(this@ExamListActivity)
+
+        if (!session.isSetup) {
+            val intent = Intent(this@ExamListActivity, InitialSetupActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_exam_list)
 
         lvExams = findViewById<ListView>(R.id.lv_exams)
@@ -38,7 +46,7 @@ class ExamListActivity : AppCompatActivity() {
     fun getExamList(): MutableList<Exam>? {
         val json = UtilFunctions.getJsonFromAssets(this, "sample_exam.json")
         if (json == null) return null
-        val gson = Gson()
+        val gson = UtilFunctions.getGsonSerializer()
         val listType = object : TypeToken<ArrayList<Exam>>() {}.type
         val model = gson.fromJson<MutableList<Exam>>(json, listType)
         return model

@@ -12,8 +12,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.google.gson.Gson
 import org.livinggoods.exam.R
-import android.content.pm.ApplicationInfo
-import android.util.Log
 import com.google.gson.reflect.TypeToken
 import org.livinggoods.exam.model.Answer
 import org.livinggoods.exam.model.Exam
@@ -40,7 +38,7 @@ class ExamViewFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        gson = Gson()
+        gson = UtilFunctions.getGsonSerializer()
 
         if (arguments != null) {
 
