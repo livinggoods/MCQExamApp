@@ -1,6 +1,8 @@
 package org.livinggoods.exam.activity
 
 import android.app.ProgressDialog
+import android.content.Intent
+import android.media.MediaCas
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,10 +13,12 @@ import mehdi.sakout.fancybuttons.FancyButton
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import org.livinggoods.exam.R
+import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.model.Trainee
 import org.livinggoods.exam.model.Training
 import org.livinggoods.exam.network.API
 import org.livinggoods.exam.network.APIClient
+import org.livinggoods.exam.persistence.SessionManager
 import org.livinggoods.exam.util.UtilFunctions
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +38,8 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
     lateinit var trainingList: MutableList<Training>
     lateinit var traineeList: MutableList<Trainee>
+    lateinit var examsList: MutableList<Exam>
+    lateinit var session: SessionManager
 
     var training: Training? = null
     var trainee: Trainee? = null
@@ -45,8 +51,10 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
         progressDialog = ProgressDialog(this@InitialSetupActivity)
         trainingList = mutableListOf<Training>()
-        traineeList = mutableListOf<Trainee>();
+        traineeList = mutableListOf<Trainee>()
+        examsList = mutableListOf<Exam>()
         gson = UtilFunctions.getGsonSerializer()
+        session = SessionManager(this@InitialSetupActivity)
 
         btnCacheOffline = findViewById<Button>(R.id.btn_cache_offline)
 
@@ -57,11 +65,6 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
         spTrainee.onItemSelectedListener = this@InitialSetupActivity
 
         tvAvailableExams = findViewById<TextView>(R.id.tv_available_exams)
-
-        btnCacheOffline.isEnabled = false
-        spTrainee.isEnabled = false
-        tvAvailableExams.isEnabled = false
-        spTraining.isEnabled = false
 
         btnCacheOffline.setOnClickListener(this@InitialSetupActivity)
 
@@ -77,11 +80,43 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
 
     override fun onClick(v: View?) {
-        // TODO
+        // Save exams
+        // Save Training
+        // Save Trainee
+        if (training == null || trainingList.size == 0) {
+            Toast.makeText(this@InitialSetupActivity, getString(R.string.no_training_selected), Toast.LENGTH_LONG)
+                    .show()
+            return
+        }
+
+        if (trainee == null || traineeList.size == 0) {
+            Toast.makeText(this@InitialSetupActivity, getString(R.string.no_trainee_selected), Toast.LENGTH_LONG)
+                    .show()
+            return
+        }
+
+        if (examsList.size == 0) {
+            Toast.makeText(this@InitialSetupActivity, getString(R.string.no_exams_available), Toast.LENGTH_LONG)
+                    .show()
+            return
+        }
+
+        val details = HashMap<String, String>()
+        details.put(SessionManager.KEY_TRAINING_JSON, gson.toJson(training))
+        details.put(SessionManager.KEY_TRAINEE_JSON, gson.toJson(trainee))
+
+        session.sessionDetails = details
+        session.isSetup = true
+        examsList.forEach { exam -> exam.save() }
+
+        // Start Exams List Activity
+        val intent = Intent(this@InitialSetupActivity, ExamListActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // Do nothing
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -98,13 +133,19 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
     }
 
     private fun onTrainingSelected(parent: AdapterView<*>, position: Int, id: Long) {
-        if (trainingList.size == 0) return
+        if (trainingList.size == 0) {
+            training = null
+            return
+        }
         training = trainingList.get(position)
         getTrainees()
     }
 
     private fun onTraineeSelected(parent: AdapterView<*>, position: Int, id: Long) {
-        if (traineeList.size == 0) return
+        if (traineeList.size == 0) {
+            trainee = null
+            return
+        }
         trainee = traineeList.get(position)
         getExams()
     }
@@ -204,9 +245,41 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
         if (training == null || trainee == null) return
 
+        val trainingId = training?.id!!
+
         progressDialog.isIndeterminate = true
-        progressDialog.setMessage(getString(R.string.loading_trainees))
+        progressDialog.setMessage(getString(R.string.loading_exams))
         progressDialog.setCancelable(false)
         progressDialog.show()
+
+        val api = APIClient.getClient(this@InitialSetupActivity).create(API::class.java)
+        val call = api.getExams(trainingId)
+        call.enqueue(object: Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+                progressDialog.dismiss()
+
+                try {
+
+                    val body = response?.body()?.string()
+                    val json = JSONObject(body)
+                    val exams = json.getJSONArray("exams")
+
+                    val listType = object: TypeToken<ArrayList<Exam>>() {}.type
+                    examsList = gson.fromJson<MutableList<Exam>>(UtilFunctions.getJsonFromAssets(this@InitialSetupActivity, "sample_exam.json"), listType)
+                    tvAvailableExams.text = examsList.size.toString()
+                    tvAvailableExams.isEnabled = true
+
+                } catch (e: Exception) {
+                    onFailure(call, e.cause)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                progressDialog.dismiss()
+
+                t?.printStackTrace()
+            }
+        })
     }
 }

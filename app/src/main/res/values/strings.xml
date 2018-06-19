@@ -19,4 +19,7 @@
     <string name="loading_trainings">Loading Trainings ...</string>
     <string name="loading_trainees">Loading Trainees ...</string>
     <string name="loading_exams">Loading Exams ...</string>
+    <string name="no_training_selected">No Training Selected</string>
+    <string name="no_trainee_selected">No Trainee Selected</string>
+    <string name="no_exams_available">No Exams Available</string>
 </resources>

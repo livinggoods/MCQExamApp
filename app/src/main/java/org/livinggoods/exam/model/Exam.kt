@@ -3,6 +3,7 @@ package org.livinggoods.exam.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.orm.SugarRecord
+import org.livinggoods.exam.util.Constants
 
 class Exam(): SugarRecord<Exam>() {
 
@@ -39,6 +40,6 @@ class Exam(): SugarRecord<Exam>() {
 
     @SerializedName("local_exam_status")
     @Expose
-    var localExamStatus: String? = null
+    var localExamStatus: String? = Constants.EXAM_STATUS_PENDING
 
 }
