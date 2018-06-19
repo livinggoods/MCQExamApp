@@ -57,4 +57,5 @@ class ExamListAdapter(context: Context, exams: MutableList<Exam>): BaseAdapter()
 
         return view
     }
+
 }

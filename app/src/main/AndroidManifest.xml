@@ -29,7 +29,8 @@
             android:value="org.livinggoods.exam" />
 
         <activity android:name=".activity.ExamListActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="@string/title_available_exams">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

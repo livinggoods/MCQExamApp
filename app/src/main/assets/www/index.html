@@ -16,7 +16,9 @@
 
 		<div class="row question" rv-each-question="data.exam.questions">
 			<div class="col-xs-12" rv-class-errorContainer="question.invalidChoice">
-				<p rv-text="question.question" class="question-title"></p>
+				<p class="question-title">
+					<span rv-text="question.number"></span>) <span rv-text="question.question"></span>
+				</p>
 				<p class="question-error" rv-if="question.invalidChoice" rv-text="question.errorMessage"></p>
 				<ul class="choice-list">
 					<li rv-each-choice="question.choices" class="choice-item">

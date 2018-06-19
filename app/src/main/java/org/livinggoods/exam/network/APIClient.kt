@@ -27,7 +27,7 @@ object APIClient {
 
     fun getClient(context: Context): Retrofit {
 
-        val BASE_URL = "http://10.0.3.2:5000/api/v1/"
+        val BASE_URL = "http://expansion-test.lg-apps.com/api/v1/"
 
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY

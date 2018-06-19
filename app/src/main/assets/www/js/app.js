@@ -6,12 +6,13 @@ var ExamApp = (function ($, rivets, _) {
 
         init: function (exam) {
 
-            exam.questions = _.map(exam.questions, function (item) {
+            exam.questions = _.map(exam.questions, function (item, index) {
                 return $.extend(true, item, {
                     choiceSelected: false,
                     invalidChoice: false,
                     isAnswerCorrect: false,
-                    errorMessage: "Please make selection"
+                    errorMessage: "Please make selection",
+                    number: index + 1
                 })
             });
 

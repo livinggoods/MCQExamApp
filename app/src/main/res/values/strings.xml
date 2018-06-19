@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Available Exams</string>
+    <string name="app_name">LG Exams</string>
+    <string name="title_available_exams">Available Exams</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -24,4 +25,5 @@
     <string name="no_trainee_selected">No Trainee Selected</string>
     <string name="no_exams_available">No Exams Available</string>
     <string name="no_exam_selected">No Exam Selected</string>
+    <string name="cannot_retake_exam">You cannot retake this exam</string>
 </resources>
