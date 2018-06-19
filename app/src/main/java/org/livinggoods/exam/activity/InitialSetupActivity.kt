@@ -14,6 +14,7 @@ import okhttp3.ResponseBody
 import org.json.JSONObject
 import org.livinggoods.exam.R
 import org.livinggoods.exam.model.Exam
+import org.livinggoods.exam.model.Question
 import org.livinggoods.exam.model.Trainee
 import org.livinggoods.exam.model.Training
 import org.livinggoods.exam.network.API
@@ -106,8 +107,24 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
         details.put(SessionManager.KEY_TRAINEE_JSON, gson.toJson(trainee))
 
         session.sessionDetails = details
+        examsList.forEach { exam ->
+            exam.save()
+            exam.questions?.forEach { question ->
+                question.localExamId = exam.id
+                question.save()
+
+                question.choices!!.forEach {choice ->
+                    choice.localQuestionId = question.id
+                    choice.save()
+                }
+
+                question.topics!!.forEach {topic ->
+                    topic.localQuestionId = question.id
+                    topic.save()
+                }
+            }
+        }
         session.isSetup = true
-        examsList.forEach { exam -> exam.save() }
 
         // Start Exams List Activity
         val intent = Intent(this@InitialSetupActivity, ExamListActivity::class.java)

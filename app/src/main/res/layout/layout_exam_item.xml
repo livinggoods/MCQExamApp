@@ -25,17 +25,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/status"
-            tools:text="Status: "/>
+            tools:text="Status:"/>
 
         <TextView
             android:id="@+id/tv_exam_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="16dp"
             android:layout_weight="100"
             tools:text="DONE"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"/>
+            android:textColor="@color/colorPrimary"/>
 
     </LinearLayout>
 

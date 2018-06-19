@@ -27,7 +27,7 @@ class Exam(): SugarRecord<Exam>() {
     var examStatusId: Any? = null
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    var examId: Int? = null
     @SerializedName("passmark")
     @Expose
     var passmark: Any? = null

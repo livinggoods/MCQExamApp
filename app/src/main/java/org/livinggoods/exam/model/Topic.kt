@@ -2,8 +2,9 @@ package org.livinggoods.exam.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.orm.SugarRecord
 
-class Topic {
+class Topic(): SugarRecord<Topic>() {
 
     @SerializedName("added_by")
     @Expose
@@ -19,9 +20,11 @@ class Topic {
     var dateAdded: String? = null
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    var topicId: Int? = null
     @SerializedName("name")
     @Expose
     var name: String? = null
+
+    var localQuestionId: Long? = null
 
 }

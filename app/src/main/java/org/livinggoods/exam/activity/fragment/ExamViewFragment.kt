@@ -15,6 +15,7 @@ import org.livinggoods.exam.R
 import com.google.gson.reflect.TypeToken
 import org.livinggoods.exam.model.Answer
 import org.livinggoods.exam.model.Exam
+import org.livinggoods.exam.util.Constants
 import org.livinggoods.exam.util.UtilFunctions
 
 class ExamViewFragment : Fragment() {
@@ -114,6 +115,12 @@ class ExamViewFragment : Fragment() {
                         val listType = object : TypeToken<ArrayList<Answer>>() {}.type
                         val answers = gson.fromJson<MutableList<Answer>>(data, listType)
                         answers.forEach { answer -> answer.save() }
+
+                        // TODO: Update this at some point
+                        val exam = mListener?.getExamJSON()!!
+                        exam.localExamStatus = Constants.EXAM_STATUS_DONE
+                        exam.save()
+
                         activity!!.finish()
                     },
                     getString(R.string.confirm),

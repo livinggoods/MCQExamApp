@@ -1,6 +1,8 @@
 package org.livinggoods.exam.activity.adapter
 
 import android.content.Context
+import android.graphics.Color
+import android.provider.SyncStateContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import org.livinggoods.exam.R
 import org.livinggoods.exam.model.Exam
+import org.livinggoods.exam.util.Constants
 
 class ExamListAdapter(context: Context, exams: MutableList<Exam>): BaseAdapter() {
 
@@ -43,6 +46,14 @@ class ExamListAdapter(context: Context, exams: MutableList<Exam>): BaseAdapter()
 
         val tvExamTitle = view?.findViewById<TextView>(R.id.tv_exam_title)!!
         tvExamTitle.text = exam.title
+
+        val tvExamStatus = view.findViewById<TextView>(R.id.tv_exam_status)
+        tvExamStatus.text = exam.localExamStatus!!.toUpperCase()
+        if (exam.localExamStatus == Constants.EXAM_STATUS_DONE) {
+            tvExamStatus.setTextColor(Color.GREEN)
+        } else {
+            tvExamStatus.setTextColor(Color.RED)
+        }
 
         return view
     }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.orm.SugarRecord
 
-class Trainee(): SugarRecord<Trainee>() {
+class Trainee {
 
     @SerializedName("added_by")
     @Expose

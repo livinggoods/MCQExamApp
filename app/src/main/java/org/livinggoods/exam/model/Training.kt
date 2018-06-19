@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.orm.SugarRecord
 
-class Training(): SugarRecord<Training>() {
+class Training {
 
     @SerializedName("archived")
     @Expose

@@ -1,21 +1,54 @@
 package org.livinggoods.exam.activity
 
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.orm.SugarRecord
 import org.livinggoods.exam.R
 import org.livinggoods.exam.activity.fragment.ExamViewFragment
+import org.livinggoods.exam.model.Choice
 import org.livinggoods.exam.model.Exam
+import org.livinggoods.exam.model.Question
+import org.livinggoods.exam.model.Topic
 import org.livinggoods.exam.util.UtilFunctions
 
 class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionListener {
 
     lateinit var btnSubmit: Button
 
+    lateinit var exam: Exam
+    lateinit var gson: Gson
+
+
+    companion object {
+        val KEY_FORM_ID = "form_id"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_exam)
+
+        gson = UtilFunctions.getGsonSerializer()
+
+        val bundle = intent.extras
+        if (bundle == null) {
+            Toast.makeText(this@TakeExamActivity, getString(R.string.no_exam_selected), Toast.LENGTH_LONG)
+                    .show()
+            finish()
+            return
+        }
+
+        val formId = bundle.getLong(KEY_FORM_ID)
+        exam = SugarRecord.findById(Exam::class.java, formId)
+        val actionbar = supportActionBar
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true)
+            actionbar.title = exam.title
+        }
 
         showQuestionFragment()
 
@@ -23,6 +56,20 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
         btnSubmit.setOnClickListener { view ->
             val f = supportFragmentManager.findFragmentById(R.id.questions_container) as ExamViewFragment
             f.webView.loadUrl("javascript:submit()")
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+         when (item?.itemId) {
+
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
     }
 
@@ -45,11 +92,25 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
     }
 
     override fun getExamJSON(): Exam {
-        val json = UtilFunctions.getJsonFromAssets(this, "sample_exam.json")
-        val gson = UtilFunctions.getGsonSerializer()
-        val listType = object : TypeToken<ArrayList<Exam>>() {}.type
-        val model = gson.fromJson<MutableList<Exam>>(json, listType)
 
-        return model.get(0)
+        val examId = exam.id
+
+        val questions = SugarRecord.find(Question::class.java, "LOCAL_EXAM_ID=?", examId.toString())
+
+        for (i in 0 until questions.size) {
+            val question = questions.get(i)
+            val choices = SugarRecord.find(Choice::class.java, "LOCAL_QUESTION_ID=?", question.id.toString())
+            val topics = SugarRecord.find(Topic::class.java, "LOCAL_QUESTION_ID=?", question.id.toString())
+
+            question.choices = choices
+            question.topics = topics
+
+            questions.set(i, question)
+        }
+
+        exam.questions = questions
+
+        return exam
+
     }
 }

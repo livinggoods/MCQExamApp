@@ -2,12 +2,14 @@ package org.livinggoods.exam.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ListView
 import org.livinggoods.exam.R
 import org.livinggoods.exam.activity.adapter.ExamListAdapter
 import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.UtilFunctions
 import com.google.gson.reflect.TypeToken
+import com.orm.SugarRecord
 import org.livinggoods.exam.persistence.SessionManager
 
 
@@ -37,18 +39,18 @@ class ExamListActivity : BaseActivity() {
         lvExams.adapter = adapter
 
         lvExams.setOnItemClickListener { parent, view, position, id ->
-            val exam = adapter.getItem(position)
+            val exam = adapter.getItem(position) as Exam
+            Log.e("exams", "${exam.title}, ${exam.id}")
             val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
+            intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
             startActivity(intent)
         }
     }
 
     fun getExamList(): MutableList<Exam>? {
-        val json = UtilFunctions.getJsonFromAssets(this, "sample_exam.json")
-        if (json == null) return null
-        val gson = UtilFunctions.getGsonSerializer()
-        val listType = object : TypeToken<ArrayList<Exam>>() {}.type
-        val model = gson.fromJson<MutableList<Exam>>(json, listType)
-        return model
+
+        val exams = SugarRecord.findAll(Exam::class.java)
+
+        return exams.asSequence().toMutableList()
     }
 }
