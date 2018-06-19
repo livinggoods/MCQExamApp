@@ -2,6 +2,57 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory
+        android:title="@string/setting_network"
+        >
 
+        <EditTextPreference
+            android:key="@string/config_api_endpoint"
+            android:title="@string/config_api_endpoint_title"
+            android:summary="@string/config_api_endpoint_summary"
+            android:defaultValue="@string/config_api_endpoint_default"/>
+
+        <EditTextPreference
+            android:key="@string/config_api_endpoint"
+            android:title="@string/config_api_endpoint_title"
+            android:summary="@string/config_api_endpoint_summary"
+            android:defaultValue="@string/config_api_endpoint_default"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_personal">
+
+        <Preference
+            android:key="config_trainee_id"
+            android:title="Trainee ID"
+            android:summary="Trainee ID of the current Trainee" />
+
+        <Preference
+            android:key="config_trainee_name"
+            android:title="Trainee Name"
+            android:summary="Trainee Name of the current Trainee" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_training">
+
+        <Preference
+            android:key="config_training_id"
+            android:title="Training ID"
+            android:summary="The Training ID of the current training"/>
+
+        <Preference
+            android:key="config_training_name"
+            android:title="Training Name"
+            android:summary="The Training Name of the current training" />
+
+        <Preference
+            android:key="config_training_country"
+            android:title="Country"
+            android:summary="The country of the current training"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

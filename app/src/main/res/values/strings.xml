@@ -26,4 +26,16 @@
     <string name="no_exams_available">No Exams Available</string>
     <string name="no_exam_selected">No Exam Selected</string>
     <string name="cannot_retake_exam">You cannot retake this exam</string>
+
+    <!--Settings-->
+    <string name="setting_network">Data Sync Settings</string>
+    <string name="config_api_endpoint">config_api_endpoint</string>
+    <string name="config_api_endpoint_title">API Endpoint</string>
+    <string name="config_api_endpoint_summary">Change the application API Endpoint settings</string>
+    <string name="config_api_endpoint_default">http://expansion-test.lg-apps.com/api/v1/</string>
+
+
+    <string name="setting_personal">Personal Details</string>
+    <string name="setting_training">Training Details</string>
+    <string name="title_settings">Settings</string>
 </resources>

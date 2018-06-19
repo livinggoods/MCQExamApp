@@ -5,6 +5,8 @@ import android.content.Intent
 import android.media.MediaCas
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import com.google.gson.Gson
@@ -78,7 +80,6 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
         if (progressDialog != null)
             progressDialog.dismiss()
     }
-
 
     override fun onClick(v: View?) {
         // Save exams
