@@ -23,7 +23,7 @@ class Question(): SugarRecord<Question>() {
     var country: String? = null
     @SerializedName("created_by")
     @Expose
-    var createdBy: Any? = null
+    var createdBy: String? = null
     @SerializedName("date_created")
     @Expose
     var dateCreated: String? = null
@@ -35,13 +35,13 @@ class Question(): SugarRecord<Question>() {
     var question: String? = null
     @SerializedName("question_type_id")
     @Expose
-    var questionTypeId: Any? = null
+    var questionTypeId: Int? = null
     @SerializedName("topics")
     @Expose
     var topics: List<Topic>? = null
-    @SerializedName("type")
-    @Expose
-    var type: Any? = null
+//    @SerializedName("type")
+//    @Expose
+//    var type: Any? = null
 
     var localExamId: Long? = null
 

@@ -8,7 +8,7 @@ class Answer(): SugarRecord<Answer>() {
 
     @SerializedName("training_exam_id")
     @Expose
-    var trainingId: String? = null
+    var trainingExamId: String? = null
 
     @SerializedName("trainee_id")
     @Expose
@@ -37,6 +37,6 @@ class Answer(): SugarRecord<Answer>() {
 
     override fun toString(): String {
 
-        return "${trainingId}-${traineeId}-${questionId}-${questionScore}-${answer}"
+        return "${trainingExamId}-${traineeId}-${questionId}-${questionScore}-${answer}"
     }
 }

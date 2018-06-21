@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.livinggoods.exam">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
         android:name=".App"
@@ -50,6 +54,36 @@
         <activity
             android:name=".activity.PendingDataActivity"
             android:label="@string/title_pending_records"/>
+
+        <!--Services-->
+        <!-- SyncAdapter's dummy authentication service -->
+        <service android:name=".service.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <service
+            android:name=".service.ExamSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/answers_sync_adapter" />
+        </service>
+
+        <!--Providers-->
+        <provider
+            android:authorities="org.livinggoods.exam.content"
+            android:name=".provider.ExamContentProvider"
+            android:exported="false"
+            android:label="Exam Data"
+            android:syncable="true" />
     </application>
 
 </manifest>

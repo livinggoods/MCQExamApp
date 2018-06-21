@@ -15,22 +15,22 @@ class Exam(): SugarRecord<Exam>() {
     var country: String? = null
     @SerializedName("created_by")
     @Expose
-    var createdBy: Any? = null
+    var createdBy: String? = null
     @SerializedName("date_created")
     @Expose
     var dateCreated: String? = null
-    @SerializedName("exam_status")
-    @Expose
-    var examStatus: Any? = null
+//    @SerializedName("exam_status")
+//    @Expose
+//    var examStatus: Any? = null
     @SerializedName("exam_status_id")
     @Expose
-    var examStatusId: Any? = null
+    var examStatusId: Int? = null
     @SerializedName("id")
     @Expose
-    var examId: Int? = null
+    var examId: String? = null
     @SerializedName("passmark")
     @Expose
-    var passmark: Any? = null
+    var passmark: Int? = null
     @SerializedName("questions")
     @Expose
     var questions: List<Question>? = null

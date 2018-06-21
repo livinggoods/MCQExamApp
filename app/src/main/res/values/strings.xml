@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">LG Exams</string>
     <string name="title_available_exams">Available Exams</string>
+    <string name="sync_account_type">org.livinggoods.exam</string>
+    <string name="content_authority">org.livinggoods.exam.content</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

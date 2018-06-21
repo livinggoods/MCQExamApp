@@ -14,6 +14,7 @@ import org.livinggoods.exam.util.UtilFunctions
 import com.google.gson.reflect.TypeToken
 import com.orm.SugarRecord
 import org.livinggoods.exam.persistence.SessionManager
+import org.livinggoods.exam.service.ExamSyncServiceAdapter
 import org.livinggoods.exam.util.Constants
 
 
@@ -34,6 +35,8 @@ class ExamListActivity : BaseActivity() {
             finish()
             return
         }
+
+        ExamSyncServiceAdapter.initializeSyncAdapter(applicationContext)
 
         setContentView(R.layout.activity_exam_list)
 

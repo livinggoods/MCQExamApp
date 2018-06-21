@@ -18,6 +18,6 @@ interface API {
     @GET("training/{training_id}/exams")
     fun getExams(@Path(value = "training_id", encoded = true) trainingId: String): Call<ResponseBody>
 
-    @POST("training/{training_id}/{trainee_id}/{exam_id}/save")
+    @POST("/training/exam/result/save")
     fun saveExamsAnswers(@Body answers: MutableList<Answer>): Call<ResponseBody>
 }
