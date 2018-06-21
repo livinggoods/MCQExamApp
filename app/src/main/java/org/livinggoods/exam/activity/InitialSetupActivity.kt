@@ -109,6 +109,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
         session.sessionDetails = details
         examsList.forEach { exam ->
+            exam.traineeId = trainee?.id!!
             exam.save()
             exam.questions?.forEach { question ->
                 question.localExamId = exam.id

@@ -28,7 +28,8 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="org.livinggoods.exam" />
 
-        <activity android:name=".activity.ExamListActivity"
+        <activity
+            android:name=".activity.ExamListActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,16 +37,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.TakeExamActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".activity.InitialSetupActivity"
+        <activity
+            android:name=".activity.TakeExamActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.InitialSetupActivity"
             android:label="@string/title_initial_setup"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".activity.SettingsActivity"
-            android:label="@string/title_settings"/>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_settings" />
+        <activity
+            android:name=".activity.PendingDataActivity"
+            android:label="@string/title_pending_records"/>
     </application>
 
 </manifest>

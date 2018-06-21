@@ -25,7 +25,7 @@ var ExamApp = (function ($, rivets, _) {
                 inputChange: function (e, model) {
                     var choice = model["%choice%"];
                     var question = model['%question%'];
-                    app.exam.questions[question].choiceSelected = model.choice.id;
+                    app.exam.questions[question].choiceSelected = model.choice.question_choice;
                     app.exam.questions[question].isAnswerCorrect = model.choice.is_answer
                 }
             }
@@ -37,10 +37,14 @@ var ExamApp = (function ($, rivets, _) {
 
                 app.exam.questions[index].invalidChoice = typeof question.choiceSelected === 'boolean';
                 return {
+                    training_exam_id: app.exam.id,
+                    trainee_id: app.exam.trainee_id,
                     question_id: question.id,
-                    choice_id: question.choiceSelected,
+                    question_score: question.isAnswerCorrect ? question.allocated_marks : 0,
+                    country: app.exam.country,
+                    answer: question.choiceSelected,
                     is_correct: question.isAnswerCorrect,
-                    allocated_marks: question.allocated_marks
+
                 }
             });
 

@@ -38,4 +38,6 @@
     <string name="setting_personal">Personal Details</string>
     <string name="setting_training">Training Details</string>
     <string name="title_settings">Settings</string>
+    <string name="pending_count" formatted="false">%d pending records</string>
+    <string name="title_pending_records">Pending Records</string>
 </resources>

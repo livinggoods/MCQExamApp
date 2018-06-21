@@ -112,6 +112,8 @@ class ExamViewFragment : Fragment() {
                     getString(R.string.confirm_inst),
                     DialogInterface.OnClickListener { dialog, which ->
 
+                        dialog.dismiss()
+
                         val listType = object : TypeToken<ArrayList<Answer>>() {}.type
                         val answers = gson.fromJson<MutableList<Answer>>(data, listType)
                         answers.forEach { answer -> answer.save() }
@@ -120,7 +122,6 @@ class ExamViewFragment : Fragment() {
                         val exam = mListener?.getExamJSON()!!
                         exam.localExamStatus = Constants.EXAM_STATUS_DONE
                         exam.save()
-
                         activity!!.finish()
                     },
                     getString(R.string.confirm),

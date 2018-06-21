@@ -67,27 +67,29 @@ class ExamListActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
-        when (item?.itemId) {
+        return when (item?.itemId) {
 
             R.id.menu_settings -> {
                 val intent = Intent(this@ExamListActivity, SettingsActivity::class.java)
                 startActivity(intent)
-                return true
+                true
             }
 
             R.id.menu_view_pending -> {
-                return true
+                val intent = Intent(this@ExamListActivity, PendingDataActivity::class.java)
+                startActivity(intent)
+                true
             }
 
             R.id.menu_trigger_upload -> {
-                return true
+                true
             }
 
             R.id.menu_reset -> {
-                return true
+                true
             }
 
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

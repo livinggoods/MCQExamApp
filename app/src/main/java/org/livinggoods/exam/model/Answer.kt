@@ -5,19 +5,38 @@ import com.google.gson.annotations.SerializedName
 import com.orm.SugarRecord
 
 class Answer(): SugarRecord<Answer>() {
+
+    @SerializedName("training_exam_id")
+    @Expose
+    var trainingId: String? = null
+
+    @SerializedName("trainee_id")
+    @Expose
+    var traineeId: String? = null
+
     @SerializedName("question_id")
     @Expose
     var questionId: Int? = null
 
-    @SerializedName("choice_id")
+    @SerializedName("question_score")
     @Expose
-    var choiceId: Int? = null
+    var questionScore: Int? = null
+
+
+    @SerializedName("country")
+    @Expose
+    var country: String? = null
+
+    @SerializedName("answer")
+    @Expose
+    var answer: String? = null
 
     @SerializedName("is_correct")
     @Expose
     var isCorrect: Boolean? = null
 
-    @SerializedName("allocated_marks")
-    @Expose
-    var allocatedMarks: Int? = null
+    override fun toString(): String {
+
+        return "${trainingId}-${traineeId}-${questionId}-${questionScore}-${answer}"
+    }
 }
