@@ -27,7 +27,7 @@ object APIClient {
 
     fun getClient(context: Context): Retrofit {
 
-        val BASE_URL = "http://ac59ef66.ngrok.io/api/v1/"
+        val BASE_URL = "http://2b4d7a7d.ngrok.io/api/v1/"
 
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY

@@ -285,7 +285,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
                     val exams = json.getJSONArray("exams")
 
                     val listType = object: TypeToken<ArrayList<Exam>>() {}.type
-                    examsList = gson.fromJson<MutableList<Exam>>(UtilFunctions.getJsonFromAssets(this@InitialSetupActivity, "sample_exam.json"), listType)
+                    examsList = gson.fromJson<MutableList<Exam>>(exams.toString(), listType)
                     tvAvailableExams.text = examsList.size.toString()
                     tvAvailableExams.isEnabled = true
 

@@ -64,7 +64,7 @@ var ExamApp = (function ($, rivets, _) {
             return {
                 isValid: examStats.isValid,
                 totalMarks: examStats.totalMarks,
-                passed: app.exam.passmark ? totalMarks >= app.passmark : true,
+                passed: app.exam.passmark ? examStats.totalMarks >= app.passmark : true,
                 answers: answers,
                 message: examStats.isValid ? "Successful" : "Please check the errors and resubmit"
             };
