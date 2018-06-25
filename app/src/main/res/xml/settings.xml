@@ -3,20 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/setting_network"
+        android:title="Sync Settings"
         >
 
         <EditTextPreference
-            android:key="@string/config_api_endpoint"
-            android:title="@string/config_api_endpoint_title"
-            android:summary="@string/config_api_endpoint_summary"
+            android:key="config_api_endpoint"
+            android:title="Cloud URL"
+            android:summary="The Cloud URL to submit the data"
             android:defaultValue="@string/config_api_endpoint_default"/>
 
         <EditTextPreference
-            android:key="@string/config_api_endpoint"
-            android:title="@string/config_api_endpoint_title"
-            android:summary="@string/config_api_endpoint_summary"
-            android:defaultValue="@string/config_api_endpoint_default"/>
+            android:key="config_trainer_phone"
+            android:title="Trainer's Phone IP Address"
+            android:summary="The IP Address for the Trainer's Phone"/>
 
     </PreferenceCategory>
 
@@ -26,7 +25,8 @@
         <Preference
             android:key="config_trainee_id"
             android:title="Trainee ID"
-            android:summary="Trainee ID of the current Trainee" />
+            android:summary="Trainee ID of the current Trainee"
+            android:defaultValue="123"/>
 
         <Preference
             android:key="config_trainee_name"

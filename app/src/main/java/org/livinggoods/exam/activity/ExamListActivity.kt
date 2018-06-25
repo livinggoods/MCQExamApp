@@ -85,6 +85,7 @@ class ExamListActivity : BaseActivity() {
             }
 
             R.id.menu_trigger_upload -> {
+                ExamSyncServiceAdapter.syncImmediately(this@ExamListActivity)
                 true
             }
 

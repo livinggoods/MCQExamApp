@@ -18,6 +18,7 @@ interface API {
     @GET("training/{training_id}/exams")
     fun getExams(@Path(value = "training_id", encoded = true) trainingId: String): Call<ResponseBody>
 
-    @POST("/training/exam/result/save")
+    @Headers("Cache-Control: no-cache")
+    @POST("training/exam/result/save")
     fun saveExamsAnswers(@Body answers: MutableList<Answer>): Call<ResponseBody>
 }

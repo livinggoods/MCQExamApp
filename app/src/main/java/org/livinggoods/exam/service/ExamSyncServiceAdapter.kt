@@ -29,23 +29,21 @@ class ExamSyncServiceAdapter(context: Context, autoInitialize: Boolean) : Abstra
     override fun onPerformSync(account: Account, extras: Bundle, authority: String,
                                provider: ContentProviderClient, syncResult: SyncResult) {
 
-        Log.e("STATUS", "ON SYNC Adapter")
-
         val exams = SugarRecord.findAll(Exam::class.java).asSequence().toMutableList()
         for (exam in exams) {
 
-            val questionsSize = SugarRecord.count<Question>(Question::class.java, "LOCAL_EXAM_ID=?", arrayOf(exam.examId))
+            val questionsSize = SugarRecord.count<Question>(Question::class.java, "LOCAL_EXAM_ID=?", arrayOf(exam.id.toString()))
             val answers = SugarRecord.find(Answer::class.java, "TRAINING_EXAM_ID=?", exam.examId)
                     .asSequence()
                     .toMutableList()
 
-            if (questionsSize != answers.size.toLong()) {
+            if (answers.size.toLong() >= questionsSize) {
                 continue
             }
 
             val api = APIClient.getClient(context).create(API::class.java)
             val call = api.saveExamsAnswers(answers)
-            call.enqueue(object: Callback<ResponseBody> {
+            call.enqueue(object : Callback<ResponseBody> {
 
                 override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
 
