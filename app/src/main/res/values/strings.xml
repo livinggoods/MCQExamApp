@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LG Exams</string>
+    <string name="app_name">TREMAP</string>
     <string name="title_available_exams">Available Exams</string>
     <string name="sync_account_type">org.livinggoods.exam</string>
     <string name="content_authority">org.livinggoods.exam.content</string>

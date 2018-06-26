@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import org.livinggoods.exam.R
 import org.livinggoods.exam.activity.adapter.ExamListAdapter
@@ -14,9 +15,12 @@ import org.livinggoods.exam.util.UtilFunctions
 import com.google.gson.reflect.TypeToken
 import com.orm.SugarRecord
 import org.livinggoods.exam.model.Answer
+import org.livinggoods.exam.model.Trainee
+import org.livinggoods.exam.model.Training
 import org.livinggoods.exam.persistence.SessionManager
 import org.livinggoods.exam.service.ExamSyncServiceAdapter
 import org.livinggoods.exam.util.Constants
+import org.w3c.dom.Text
 
 
 class ExamListActivity : BaseActivity() {
@@ -24,8 +28,12 @@ class ExamListActivity : BaseActivity() {
     lateinit var lvExams: ListView
     lateinit var adapter: ExamListAdapter
     lateinit var session: SessionManager
+    lateinit var tvTrainee: TextView
+    lateinit var tvTraining: TextView
+    lateinit var tvPendingRecords: TextView
 
     var registered: Boolean = false
+    var isSyncTriggeredManually = false
 
     internal var examDoneReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -33,6 +41,25 @@ class ExamListActivity : BaseActivity() {
             Log.e("STATUS", "Updating list")
 
             adapter.updateList()
+            tvPendingRecords.text = SugarRecord.count<Answer>(Answer::class.java, "", arrayOf()).toString()
+
+        }
+    }
+
+    internal var answerUploadReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val params = intent.extras
+
+            tvPendingRecords.text = SugarRecord.count<Answer>(Answer::class.java, "", arrayOf()).toString()
+
+            if (params == null) return
+
+            if (params.containsKey(ExamSyncServiceAdapter.KEY_UPLOAD_MSG) && isSyncTriggeredManually) {
+                val msg = params.getString(ExamSyncServiceAdapter.KEY_UPLOAD_MSG)
+                Toast.makeText(this@ExamListActivity, msg, Toast.LENGTH_LONG).show()
+
+                isSyncTriggeredManually = false
+            }
 
         }
     }
@@ -58,6 +85,20 @@ class ExamListActivity : BaseActivity() {
         adapter = ExamListAdapter(this, examList!!)
         lvExams.adapter = adapter
 
+        tvPendingRecords = findViewById(R.id.tv_pending_records) as TextView
+        tvTrainee = findViewById(R.id.tv_trainee)
+        tvTraining = findViewById(R.id.tv_training)
+
+        val session = SessionManager(this@ExamListActivity)
+        val details = session.sessionDetails
+        val gson = UtilFunctions.getGsonSerializer()
+        val trainee = gson.fromJson<Trainee>(details.get(SessionManager.KEY_TRAINEE_JSON), Trainee::class.java)
+        val training = gson.fromJson<Training>(details.get(SessionManager.KEY_TRAINING_JSON), Training::class.java)
+
+        tvTrainee.text = trainee.registration?.name
+        tvTraining.text = training.trainingName
+        tvPendingRecords.text = SugarRecord.count<Answer>(Answer::class.java, "", arrayOf()).toString()
+
         lvExams.setOnItemClickListener { parent, view, position, id ->
             val exam = adapter.getItem(position) as Exam
 
@@ -76,6 +117,20 @@ class ExamListActivity : BaseActivity() {
 
         registerReceiver(examDoneReceiver, IntentFilter(TakeExamActivity.ACTION_EXAM_DONE))
         registered = true
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        registerReceiver(answerUploadReceiver, IntentFilter(ExamSyncServiceAdapter.ACTION_UPLOAD_COMPLETE))
+    }
+
+    override fun onPause() {
+
+        unregisterReceiver(answerUploadReceiver)
+
+        super.onPause()
     }
 
     override fun onDestroy() {
@@ -107,6 +162,8 @@ class ExamListActivity : BaseActivity() {
             }
 
             R.id.menu_trigger_upload -> {
+                Toast.makeText(this@ExamListActivity, "Starting data sync in the background", Toast.LENGTH_LONG).show()
+                isSyncTriggeredManually = true
                 ExamSyncServiceAdapter.syncImmediately(this@ExamListActivity)
                 true
             }

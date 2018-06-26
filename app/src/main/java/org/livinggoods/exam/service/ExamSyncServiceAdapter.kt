@@ -57,9 +57,13 @@ class ExamSyncServiceAdapter(context: Context, autoInitialize: Boolean) : Abstra
                             // TODO: Log this event
                             answers.forEach { answer -> answer.delete() }
 
+                            val intent = Intent(ACTION_UPLOAD_COMPLETE)
+                            context.sendBroadcast(intent)
+
                         } else {
 
                             // TODO Log this event
+                            throw Exception("Invalid arguments")
                         }
 
                     } catch (ex: Exception) {
@@ -70,6 +74,9 @@ class ExamSyncServiceAdapter(context: Context, autoInitialize: Boolean) : Abstra
                 override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
 
                     // TODO Log this error
+                    val intent = Intent(ACTION_UPLOAD_COMPLETE)
+                    intent.putExtra(KEY_UPLOAD_MSG, "Sync failed. Please check your internet connection and try again")
+                    context.sendBroadcast(intent)
                 }
             })
         }
@@ -81,6 +88,9 @@ class ExamSyncServiceAdapter(context: Context, autoInitialize: Boolean) : Abstra
         val SYNC_INTERVAL = 15
         val SYNC_FLEXTIME = SYNC_INTERVAL / 3
         val NOTIFICATION_ID = 3004
+        val KEY_UPLOAD_MSG = "upload_msg"
+        val ACTION_UPLOAD_COMPLETE = "upload_complete"
+
 
 
         fun configurePeriodicSync(context: Context, syncInterval: Int, flexTime: Int) {
