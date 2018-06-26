@@ -19,6 +19,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/menu_export_data_to_sd"
+        android:title="Export Data to SD card"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_reset"
         android:title="Reset Settings"
         app:showAsAction="never"/>

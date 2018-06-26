@@ -130,7 +130,7 @@ class ExamSyncServiceAdapter(context: Context, autoInitialize: Boolean) : Abstra
 
             val accountManager = context.getSystemService(Context.ACCOUNT_SERVICE) as AccountManager
 
-            val newAccount = Account("something", context.getString(R.string.sync_account_type))
+            val newAccount = Account(trainee.id, context.getString(R.string.sync_account_type))
 
             if (accountManager.getPassword(newAccount) == null) {
                 if (!accountManager.addAccountExplicitly(newAccount, "", null)) {

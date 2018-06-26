@@ -1,7 +1,12 @@
 package org.livinggoods.exam.activity
 
+import android.Manifest
 import android.content.*
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +19,7 @@ import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.UtilFunctions
 import com.google.gson.reflect.TypeToken
 import com.orm.SugarRecord
+import com.vistrav.ask.Ask
 import org.livinggoods.exam.model.Answer
 import org.livinggoods.exam.model.Trainee
 import org.livinggoods.exam.model.Training
@@ -21,6 +27,12 @@ import org.livinggoods.exam.persistence.SessionManager
 import org.livinggoods.exam.service.ExamSyncServiceAdapter
 import org.livinggoods.exam.util.Constants
 import org.w3c.dom.Text
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import com.vistrav.ask.annotations.AskDenied
+import com.vistrav.ask.annotations.AskGranted
+import java.io.FileWriter
 
 
 class ExamListActivity : BaseActivity() {
@@ -34,6 +46,8 @@ class ExamListActivity : BaseActivity() {
 
     var registered: Boolean = false
     var isSyncTriggeredManually = false
+
+    val DATA_STORAGE_DIR = "TREMAP"
 
     internal var examDoneReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -186,6 +200,11 @@ class ExamListActivity : BaseActivity() {
                 true
             }
 
+            R.id.menu_export_data_to_sd -> {
+                exportToSdCard()
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -195,5 +214,72 @@ class ExamListActivity : BaseActivity() {
         val exams = SugarRecord.findAll(Exam::class.java)
 
         return exams.asSequence().toMutableList()
+    }
+
+    fun exportToSdCard() {
+
+        val isGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
+        if (isGranted) {
+            fileAccessGranted(2000)
+        } else {
+            Ask.on(this@ExamListActivity)
+                    .id(2000)
+                    .forPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withRationales("Please allow permission for this feature to work")
+                    .go()
+        }
+    }
+
+    @AskGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun fileAccessGranted(id: Int) {
+        try {
+            val file = getOutputMediaFile()!!
+            val records = SugarRecord.findAll(Answer::class.java).asSequence().toMutableList()
+            val gson = UtilFunctions.getGsonSerializer()
+
+            val writer = FileWriter(file)
+            writer.write(gson.toJson(records))
+            writer.close()
+
+            Toast.makeText(this@ExamListActivity, "Data written to ${file.path}", Toast.LENGTH_LONG).show()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    @AskDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun fileAccessDenied(id: Int) {
+        Toast.makeText(this@ExamListActivity, "Permission denied. Please allow permission for this feature", Toast.LENGTH_LONG)
+                .show()
+    }
+
+    private fun isExternalStorageReadOnly(): Boolean {
+        val extStorageState = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED_READ_ONLY == extStorageState
+    }
+
+    private fun isExternalStorageAvailable(): Boolean {
+        val extStorageState = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED == extStorageState
+    }
+
+    private fun getOutputMediaFile(): File? {
+
+        val mediaStorageDir = File(Environment.getExternalStorageDirectory(), DATA_STORAGE_DIR)
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.e(DATA_STORAGE_DIR, "Oops! Failed create "
+                        + DATA_STORAGE_DIR + " directory")
+                return null
+            }
+        }
+
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+
+        val mediaFile = File("${mediaStorageDir.getPath()}${File.separator}EXPORT_${timestamp}.json")
+
+        return mediaFile
     }
 }
