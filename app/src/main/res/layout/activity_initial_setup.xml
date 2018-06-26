@@ -23,8 +23,7 @@
         <Spinner
             android:id="@+id/sp_training"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/trainings" />
+            android:layout_height="wrap_content" />
 
 
         <TextView
@@ -36,8 +35,7 @@
         <Spinner
             android:id="@+id/sp_trainees"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/trainees" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="match_parent"

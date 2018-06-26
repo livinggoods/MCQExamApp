@@ -50,7 +50,7 @@ var ExamApp = (function ($, rivets, _) {
 
             var examStats = _.reduce(answers,
                 function (result, value, key) {
-                    var isValid = result.isValid && !(typeof value.choice_id === 'boolean');
+                    var isValid = result.isValid && !(typeof value.answer === 'boolean');
                     var totalMarks = result.totalMarks + value.is_correct && value.allocated_marks ? value.allocated_marks : 0;
                     return {
                         isValid: isValid,
@@ -64,7 +64,7 @@ var ExamApp = (function ($, rivets, _) {
             return {
                 isValid: examStats.isValid,
                 totalMarks: examStats.totalMarks,
-                passed: app.exam.passmark ? totalMarks >= app.passmark : true,
+                passed: app.exam.passmark ? examStats.totalMarks >= app.passmark : true,
                 answers: answers,
                 message: examStats.isValid ? "Successful" : "Please check the errors and resubmit"
             };

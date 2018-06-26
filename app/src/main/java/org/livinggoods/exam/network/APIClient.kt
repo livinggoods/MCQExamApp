@@ -8,6 +8,7 @@ import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.livinggoods.exam.persistence.SessionManager
 import org.livinggoods.exam.util.UtilFunctions
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,7 +28,7 @@ object APIClient {
 
     fun getClient(context: Context): Retrofit {
 
-        val BASE_URL = "http://3fae3729.ngrok.io/api/v1/"
+        val session = SessionManager(context)
 
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
@@ -43,7 +44,7 @@ object APIClient {
 
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(session.cloudEndpoint)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(httpClient)
                     .build()

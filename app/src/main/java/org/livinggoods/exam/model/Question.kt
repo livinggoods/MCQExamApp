@@ -3,6 +3,7 @@ package org.livinggoods.exam.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.orm.SugarRecord
+import com.orm.dsl.Ignore
 
 class Question(): SugarRecord<Question>() {
 
@@ -15,6 +16,8 @@ class Question(): SugarRecord<Question>() {
     @SerializedName("batch_id")
     @Expose
     var batchId: String? = null
+
+    @Ignore
     @SerializedName("choices")
     @Expose
     var choices: List<Choice>? = null
@@ -36,6 +39,8 @@ class Question(): SugarRecord<Question>() {
     @SerializedName("question_type_id")
     @Expose
     var questionTypeId: Int? = null
+
+    @Ignore
     @SerializedName("topics")
     @Expose
     var topics: List<Topic>? = null

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.orm.SugarRecord
 import org.livinggoods.exam.R
 import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.Constants
@@ -56,6 +57,12 @@ class ExamListAdapter(context: Context, exams: MutableList<Exam>): BaseAdapter()
         }
 
         return view
+    }
+
+    fun updateList() {
+
+        exams = SugarRecord.findAll(Exam::class.java).asSequence().toMutableList()
+        notifyDataSetChanged()
     }
 
 }

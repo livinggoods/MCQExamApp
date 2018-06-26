@@ -37,7 +37,7 @@ class ExamSyncServiceAdapter(context: Context, autoInitialize: Boolean) : Abstra
                     .asSequence()
                     .toMutableList()
 
-            if (answers.size.toLong() >= questionsSize) {
+            if (answers.size.toLong() < questionsSize) {
                 continue
             }
 

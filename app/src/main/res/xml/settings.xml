@@ -26,7 +26,7 @@
             android:key="config_trainee_id"
             android:title="Trainee ID"
             android:summary="Trainee ID of the current Trainee"
-            android:defaultValue="123"/>
+            />
 
         <Preference
             android:key="config_trainee_name"

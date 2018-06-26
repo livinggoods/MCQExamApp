@@ -3,12 +3,14 @@
     <string name="title_available_exams">Available Exams</string>
     <string name="sync_account_type">org.livinggoods.exam</string>
     <string name="content_authority">org.livinggoods.exam.content</string>
-    <string name="config_api_endpoint_default">http://69e33bd0.ngrok.io/api/v1/</string>
+    <string name="config_api_endpoint_default">http://192.168.4.122:5000/api/v1/</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="confirm_submission">Confirm Submission</string>
+    <string name="confirm_settings_reset">App Reset</string>
+    <string name="confirm_settings_reset_inst">Tap CONFIRM button to reset app</string>
     <string name="confirm_inst">Tap the CONFIRM button to submit</string>
     <string name="title_initial_setup">Initial Setup</string>
     <string name="confirm">CONFIRM</string>

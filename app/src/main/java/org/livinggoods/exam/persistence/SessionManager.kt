@@ -3,6 +3,11 @@ package org.livinggoods.exam.persistence
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
+import com.orm.SugarRecord
+import org.livinggoods.exam.R
+import org.livinggoods.exam.activity.InitialSetupActivity
+import org.livinggoods.exam.model.*
 
 class SessionManager(internal var _context: Context) {
 
@@ -16,14 +21,17 @@ class SessionManager(internal var _context: Context) {
 
         private val PREF_NAME = "8eNqmdRPCjqAxWCv8tk23j8PQnTxRcgNVCQpqzqKqAKsdfsdfdsf"
 
-        val IS_SET_UP = "IsSetUp"
+        val IS_SET_UP = "config_is_setUp"
 
-        val KEY_TRAINING_JSON = "training_json"
-        val KEY_TRAINEE_JSON = "trainee_json"
+        val KEY_TRAINING_JSON = "config_training_json"
+        val KEY_TRAINEE_JSON = "config_trainee_json"
+        val KEY_CLOUD_ENDPOINT = "config_cloud_endpoint"
+        val KEY_TRAINERS_IP = "config_trainer_ip"
     }
 
+
     init {
-        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        pref = PreferenceManager.getDefaultSharedPreferences(_context)
         editor = pref.edit()
     }
 
@@ -31,7 +39,6 @@ class SessionManager(internal var _context: Context) {
         get() {
             return pref.getBoolean(IS_SET_UP, false)
         }
-
         set(value: Boolean) {
             editor.putBoolean(IS_SET_UP, value)
             editor.commit()
@@ -47,7 +54,6 @@ class SessionManager(internal var _context: Context) {
 
             return value
         }
-
         set(value: HashMap<String, String>) {
 
             val traineeJson = value.get(KEY_TRAINEE_JSON)
@@ -58,4 +64,27 @@ class SessionManager(internal var _context: Context) {
 
             editor.commit()
         }
+
+    val cloudEndpoint: String
+        get() {
+            return pref.getString(KEY_CLOUD_ENDPOINT, _context.getString(R.string.config_api_endpoint_default))
+        }
+
+    fun reset() {
+        editor.clear()
+        editor.commit()
+
+        SugarRecord.deleteAll(Answer::class.java)
+        SugarRecord.deleteAll(Choice::class.java)
+        SugarRecord.deleteAll(Exam::class.java)
+        SugarRecord.deleteAll(Question::class.java)
+        SugarRecord.deleteAll(Topic::class.java)
+
+        val i = Intent(_context, InitialSetupActivity::class.java)
+
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        _context.startActivity(i)
+    }
 }

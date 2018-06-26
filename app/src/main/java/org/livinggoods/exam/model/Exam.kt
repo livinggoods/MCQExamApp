@@ -3,6 +3,7 @@ package org.livinggoods.exam.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.orm.SugarRecord
+import com.orm.dsl.Ignore
 import org.livinggoods.exam.util.Constants
 
 class Exam(): SugarRecord<Exam>() {
@@ -31,6 +32,8 @@ class Exam(): SugarRecord<Exam>() {
     @SerializedName("passmark")
     @Expose
     var passmark: Int? = null
+
+    @Ignore
     @SerializedName("questions")
     @Expose
     var questions: List<Question>? = null

@@ -2,8 +2,10 @@ package org.livinggoods.exam.activity.fragment
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import android.webkit.WebViewClient
 import com.google.gson.Gson
 import org.livinggoods.exam.R
 import com.google.gson.reflect.TypeToken
+import org.livinggoods.exam.activity.TakeExamActivity
 import org.livinggoods.exam.model.Answer
 import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.Constants
@@ -102,6 +105,8 @@ class ExamViewFragment : Fragment() {
         @JavascriptInterface
         fun submitAnswers(status: Boolean, message: String, data: String, totalMarks: Int, isPassed: Boolean) {
 
+            Log.e("STATUS", "${status}, $message")
+
             if (!status) {
                 mListener!!.onShowError(message)
                 return
@@ -122,6 +127,10 @@ class ExamViewFragment : Fragment() {
                         val exam = mListener?.getExamJSON()!!
                         exam.localExamStatus = Constants.EXAM_STATUS_DONE
                         exam.save()
+
+                        val intent = Intent(TakeExamActivity.ACTION_EXAM_DONE)
+                        context!!.sendBroadcast(intent)
+
                         activity!!.finish()
                     },
                     getString(R.string.confirm),

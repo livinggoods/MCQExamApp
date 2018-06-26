@@ -1,6 +1,6 @@
 package org.livinggoods.exam.activity
 
-import android.content.Intent
+import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -13,6 +13,7 @@ import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.UtilFunctions
 import com.google.gson.reflect.TypeToken
 import com.orm.SugarRecord
+import org.livinggoods.exam.model.Answer
 import org.livinggoods.exam.persistence.SessionManager
 import org.livinggoods.exam.service.ExamSyncServiceAdapter
 import org.livinggoods.exam.util.Constants
@@ -23,6 +24,18 @@ class ExamListActivity : BaseActivity() {
     lateinit var lvExams: ListView
     lateinit var adapter: ExamListAdapter
     lateinit var session: SessionManager
+
+    var registered: Boolean = false
+
+    internal var examDoneReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+
+            Log.e("STATUS", "Updating list")
+
+            adapter.updateList()
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +73,15 @@ class ExamListActivity : BaseActivity() {
         }
 
         supportActionBar?.title = getString(R.string.title_available_exams)
+
+        registerReceiver(examDoneReceiver, IntentFilter(TakeExamActivity.ACTION_EXAM_DONE))
+        registered = true
+    }
+
+    override fun onDestroy() {
+
+        if (registered) unregisterReceiver(examDoneReceiver)
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -90,6 +112,20 @@ class ExamListActivity : BaseActivity() {
             }
 
             R.id.menu_reset -> {
+
+                UtilFunctions.showDialog(this@ExamListActivity,
+                        getString(R.string.confirm_settings_reset),
+                        getString(R.string.confirm_settings_reset_inst),
+                        DialogInterface.OnClickListener { dialog, which ->
+
+                            dialog.dismiss()
+                            session.reset()
+                            this@ExamListActivity.finish()
+                        },
+                        getString(R.string.confirm),
+                        DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() },
+                        getString(R.string.cancel)
+                )
                 true
             }
 

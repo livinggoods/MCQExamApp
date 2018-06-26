@@ -26,6 +26,8 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
 
     companion object {
         val KEY_FORM_ID = "form_id"
+
+        val ACTION_EXAM_DONE = "exam_done"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
