@@ -1,38 +1,46 @@
 package org.livinggoods.exam.activity
 
 import android.Manifest
+import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.*
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.content.ContextCompat
+import android.text.InputType
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
-import org.livinggoods.exam.R
-import org.livinggoods.exam.activity.adapter.ExamListAdapter
-import org.livinggoods.exam.model.Exam
-import org.livinggoods.exam.util.UtilFunctions
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.orm.SugarRecord
 import com.vistrav.ask.Ask
-import org.livinggoods.exam.model.Answer
-import org.livinggoods.exam.model.Trainee
-import org.livinggoods.exam.model.Training
+import com.vistrav.ask.annotations.AskDenied
+import com.vistrav.ask.annotations.AskGranted
+import mehdi.sakout.fancybuttons.FancyButton
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import org.livinggoods.exam.R
+import org.livinggoods.exam.activity.adapter.ExamListAdapter
+import org.livinggoods.exam.model.*
+import org.livinggoods.exam.network.API
+import org.livinggoods.exam.network.APIClient
 import org.livinggoods.exam.persistence.SessionManager
 import org.livinggoods.exam.service.ExamSyncServiceAdapter
 import org.livinggoods.exam.util.Constants
-import org.w3c.dom.Text
+import org.livinggoods.exam.util.UtilFunctions
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
+import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
-import com.vistrav.ask.annotations.AskDenied
-import com.vistrav.ask.annotations.AskGranted
-import java.io.FileWriter
 
 
 class ExamListActivity : BaseActivity() {
@@ -43,6 +51,10 @@ class ExamListActivity : BaseActivity() {
     lateinit var tvTrainee: TextView
     lateinit var tvTraining: TextView
     lateinit var tvPendingRecords: TextView
+    lateinit var trainee: Trainee
+    lateinit var training: Training
+    lateinit var gson: Gson
+    lateinit var btnRefresh: FancyButton
 
     var registered: Boolean = false
     var isSyncTriggeredManually = false
@@ -105,13 +117,16 @@ class ExamListActivity : BaseActivity() {
 
         val session = SessionManager(this@ExamListActivity)
         val details = session.sessionDetails
-        val gson = UtilFunctions.getGsonSerializer()
-        val trainee = gson.fromJson<Trainee>(details.get(SessionManager.KEY_TRAINEE_JSON), Trainee::class.java)
-        val training = gson.fromJson<Training>(details.get(SessionManager.KEY_TRAINING_JSON), Training::class.java)
+        gson = UtilFunctions.getGsonSerializer()
+        trainee = gson.fromJson<Trainee>(details.get(SessionManager.KEY_TRAINEE_JSON), Trainee::class.java)
+        training = gson.fromJson<Training>(details.get(SessionManager.KEY_TRAINING_JSON), Training::class.java)
 
         tvTrainee.text = trainee.registration?.name
         tvTraining.text = training.trainingName
         tvPendingRecords.text = SugarRecord.count<Answer>(Answer::class.java, "", arrayOf()).toString()
+
+        btnRefresh = findViewById<FancyButton>(R.id.btn_refresh)
+        btnRefresh.setOnClickListener { getExams() }
 
         lvExams.setOnItemClickListener { parent, view, position, id ->
             val exam = adapter.getItem(position) as Exam
@@ -122,9 +137,39 @@ class ExamListActivity : BaseActivity() {
                 return@setOnItemClickListener
             }
 
-            val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
-            intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
-            startActivity(intent)
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Enter Exam Unlock Code")
+            val input = EditText(this)
+            input.inputType = InputType.TYPE_CLASS_NUMBER
+
+            builder.setPositiveButton("OK", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+
+                    val unlockCode = input.text.toString().toInt()
+                    if (unlockCode == exam.unlockCode) {
+                        val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
+                        intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this@ExamListActivity, "Wrong unlock code. Please try again", Toast.LENGTH_LONG)
+                                .show()
+                    }
+
+                    dialog?.dismiss()
+                }
+            })
+            builder.setNegativeButton("CANCEL", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    dialog?.dismiss()
+                }
+
+            })
+
+            val dialog = builder.create()
+            val dpi = this@ExamListActivity.getResources().getDisplayMetrics().density
+            dialog.setView(input, (19*dpi).toInt(), (5*dpi).toInt(), (14*dpi).toInt(), (5*dpi).toInt())
+
+            dialog.show()
         }
 
         supportActionBar?.title = getString(R.string.title_available_exams)
@@ -281,5 +326,83 @@ class ExamListActivity : BaseActivity() {
         val mediaFile = File("${mediaStorageDir.getPath()}${File.separator}EXPORT_${timestamp}.json")
 
         return mediaFile
+    }
+
+    private fun getExams() {
+
+        if (training == null || trainee == null) return
+
+        val trainingId = training.id!!
+
+        val progressDialog = ProgressDialog(this@ExamListActivity)
+        progressDialog.isIndeterminate = true
+        progressDialog.setMessage(getString(R.string.loading_exams))
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        val api = APIClient.getClient(this@ExamListActivity).create(API::class.java)
+        val call = api.getExams(trainingId)
+        call.enqueue(object: Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+                progressDialog.dismiss()
+
+                try {
+
+                    val body = response?.body()?.string()
+                    val json = JSONObject(body)
+                    val exams = json.getJSONArray("exams")
+
+                    val listType = object: TypeToken<ArrayList<Exam>>() {}.type
+                    val newExamsList = gson.fromJson<MutableList<Exam>>(exams.toString(), listType)
+
+                    newExamsList.forEach { newExam ->
+                        val exam = SugarRecord.find(Exam::class.java, "EXAM_ID=?", "${newExam.examId}").firstOrNull()
+                        if (exam != null) {
+                            if (exam.localExamStatus == Constants.EXAM_STATUS_DONE)
+                                return@forEach
+
+                            val existingQuestions = SugarRecord.find(Question::class.java, "LOCAL_EXAM_ID=?", "${exam.id}")
+                            existingQuestions.forEach { eQuestion ->
+                                SugarRecord.deleteAll(Topic::class.java, "LOCAL_QUESTION_ID=?", "${eQuestion.id}")
+                                SugarRecord.deleteAll(Choice::class.java, "LOCAL_QUESTION_ID=?", "${eQuestion.id}")
+                                eQuestion.delete()
+                            }
+
+                            exam.delete()
+                        }
+
+                        // Proceed to save the exam details
+                        newExam.traineeId = trainee.id!!
+                        newExam.save()
+                        newExam.questions?.forEach { question ->
+                            question.localExamId = newExam.id
+                            question.save()
+
+                            question.choices!!.forEach {choice ->
+                                choice.localQuestionId = question.id
+                                choice.save()
+                            }
+
+                            question.topics!!.forEach {topic ->
+                                topic.localQuestionId = question.id
+                                topic.save()
+                            }
+                        }
+                    }
+
+                    adapter.updateList()
+
+                } catch (e: Exception) {
+                    onFailure(call, e.cause)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                progressDialog.dismiss()
+
+                showConnectionError(call!!, t!!)
+            }
+        })
     }
 }

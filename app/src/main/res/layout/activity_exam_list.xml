@@ -97,14 +97,41 @@
         android:layout_height="1dp"
         android:background="#CCCCCC" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="5dp"
-        android:text="Available Exams"
+        android:orientation="horizontal"
+        android:paddingRight="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"/>
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Available Exams"
+            android:layout_gravity="center_vertical"
+            />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="5dp"
+            app:fb_defaultColor="@color/colorPrimary"
+            app:fb_focusColor="@color/colorPrimaryDark"
+            app:fb_radius="5dp"
+            app:fb_text="@string/refresh"
+            app:fb_textColor="#FFFFFF"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+
 
     <ListView
         android:id="@+id/lv_exams"

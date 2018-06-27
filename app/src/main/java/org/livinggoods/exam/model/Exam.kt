@@ -45,6 +45,10 @@ class Exam(): SugarRecord<Exam>() {
     @Expose
     var localExamStatus: String? = Constants.EXAM_STATUS_PENDING
 
+    @SerializedName("unlock_code")
+    @Expose
+    var unlockCode: Int? = 1234
+
     @SerializedName("trainee_id")
     @Expose
     var traineeId: String? = null

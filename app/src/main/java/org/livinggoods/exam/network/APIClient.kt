@@ -110,7 +110,7 @@ object APIClient {
         }
     }
 
-    private fun isConnected(mContext: Context): Boolean {
+    fun isConnected(mContext: Context): Boolean {
         try {
             val e = mContext.getSystemService(
                     Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager

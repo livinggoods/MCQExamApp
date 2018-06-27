@@ -206,9 +206,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
             override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                 progressDialog.dismiss()
 
-                t?.printStackTrace()
-
-                // TODO add error handler
+                showConnectionError(call!!, t!!)
             }
         })
     }
@@ -255,7 +253,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
                 t?.printStackTrace()
 
-                // TODO add error handler
+                showConnectionError(call!!, t!!)
             }
         })
     }
@@ -297,7 +295,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
             override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                 progressDialog.dismiss()
 
-                t?.printStackTrace()
+                showConnectionError(call!!, t!!)
             }
         })
     }
