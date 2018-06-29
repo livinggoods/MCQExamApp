@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.*
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.content.ContextCompat
@@ -137,16 +138,26 @@ class ExamListActivity : BaseActivity() {
                 return@setOnItemClickListener
             }
 
+            val dpi = this@ExamListActivity.getResources().getDisplayMetrics().density
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Enter Exam Unlock Code")
             val input = EditText(this)
+            input.hint = "e.g 4321"
             input.inputType = InputType.TYPE_CLASS_NUMBER
 
             builder.setPositiveButton("OK", object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
 
-                    val unlockCode = input.text.toString().toInt()
-                    if (unlockCode == exam.unlockCode) {
+                    val unlockCode = input.text.toString()
+
+                    if (unlockCode.trim().isBlank()) {
+                        input.error = "Invalid Input"
+                        return
+                    }
+
+                    input.error = null
+
+                    if (unlockCode.toInt() == exam.unlockCode) {
                         val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
                         intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
                         startActivity(intent)
@@ -166,10 +177,11 @@ class ExamListActivity : BaseActivity() {
             })
 
             val dialog = builder.create()
-            val dpi = this@ExamListActivity.getResources().getDisplayMetrics().density
             dialog.setView(input, (19*dpi).toInt(), (5*dpi).toInt(), (14*dpi).toInt(), (5*dpi).toInt())
 
             dialog.show()
+
+            input.requestFocus()
         }
 
         supportActionBar?.title = getString(R.string.title_available_exams)
@@ -288,6 +300,12 @@ class ExamListActivity : BaseActivity() {
             writer.close()
 
             Toast.makeText(this@ExamListActivity, "Data written to ${file.path}", Toast.LENGTH_LONG).show()
+
+            val sharingIntent = Intent(Intent.ACTION_SEND)
+            sharingIntent.type = "*/*"
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
+            startActivity(Intent.createChooser(sharingIntent, "SEND TO:"))
+
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

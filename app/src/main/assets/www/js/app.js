@@ -9,6 +9,7 @@ var ExamApp = (function ($, rivets, _) {
             exam.questions = _.map(exam.questions, function (item, index) {
                 return $.extend(true, item, {
                     choiceSelected: false,
+                    choiceIdSelected: null,
                     invalidChoice: false,
                     isAnswerCorrect: false,
                     errorMessage: "Please make selection",
@@ -26,7 +27,8 @@ var ExamApp = (function ($, rivets, _) {
                     var choice = model["%choice%"];
                     var question = model['%question%'];
                     app.exam.questions[question].choiceSelected = model.choice.question_choice;
-                    app.exam.questions[question].isAnswerCorrect = model.choice.is_answer
+                    app.exam.questions[question].choiceIdSelected = model.choice.id;
+                    app.exam.questions[question].isAnswerCorrect = model.choice.is_answer;
                 }
             }
         },
@@ -44,21 +46,31 @@ var ExamApp = (function ($, rivets, _) {
                     country: app.exam.country,
                     answer: question.choiceSelected,
                     is_correct: question.isAnswerCorrect,
-
+                    number: question.number,
+                    choice_id: question.choiceIdSelected
                 }
             });
 
             var examStats = _.reduce(answers,
                 function (result, value, key) {
-                    var isValid = result.isValid && !(typeof value.answer === 'boolean');
+
+                    var invalid = typeof value.answer === 'boolean';
+                    var isValid = result.isValid && !invalid;
                     var totalMarks = result.totalMarks + value.is_correct && value.allocated_marks ? value.allocated_marks : 0;
+
+                    if (invalid) {
+                        result.message += value.number + ", ";
+                    }
+
                     return {
                         isValid: isValid,
-                        totalMarks: totalMarks
+                        totalMarks: totalMarks,
+                        message: result.message
                     };
                 }, {
                     isValid: true,
-                    totalMarks: 0
+                    totalMarks: 0,
+                    message: "Please answer questions: "
                 });
 
             return {
@@ -66,7 +78,7 @@ var ExamApp = (function ($, rivets, _) {
                 totalMarks: examStats.totalMarks,
                 passed: app.exam.passmark ? examStats.totalMarks >= app.passmark : true,
                 answers: answers,
-                message: examStats.isValid ? "Successful" : "Please check the errors and resubmit"
+                message: examStats.message
             };
         },
 

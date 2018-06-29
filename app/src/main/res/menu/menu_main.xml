@@ -4,18 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_settings"
-        android:title="SETTINGS"
+        android:id="@+id/menu_trigger_upload"
+        android:title="SYNC"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_settings"
+        android:title="Settings"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_view_pending"
         android:title="View Pending Data"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_trigger_upload"
-        android:title="Trigger Data Sync"
         app:showAsAction="never"/>
 
     <item

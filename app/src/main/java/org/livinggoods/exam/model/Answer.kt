@@ -31,6 +31,10 @@ class Answer(): SugarRecord<Answer>() {
     @Expose
     var answer: String? = null
 
+    @SerializedName("choice_id")
+    @Expose
+    var choiceId: Int? = null
+
     @SerializedName("is_correct")
     @Expose
     var isCorrect: Boolean? = null

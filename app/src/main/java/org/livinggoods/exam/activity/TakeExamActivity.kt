@@ -1,5 +1,6 @@
 package org.livinggoods.exam.activity
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -90,7 +91,11 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
     }
 
     override fun onShowError(message: String) {
-        Toast.makeText(this@TakeExamActivity, message, Toast.LENGTH_LONG).show()
+
+        UtilFunctions.showDialog(this@TakeExamActivity, "Error",
+                message,
+                DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() }, "OK",
+                null, null)
     }
 
     override fun getExamJSON(): Exam {
