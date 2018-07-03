@@ -114,7 +114,7 @@
             android:layout_gravity="center_vertical"
             />
 
-        <mehdi.sakout.fancybuttons.FancyButton
+        <!--<mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/btn_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
             app:fb_radius="5dp"
             app:fb_text="@string/refresh"
             app:fb_textColor="#FFFFFF"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"/>-->
 
     </LinearLayout>
 

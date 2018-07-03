@@ -7,16 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.TextView
 import com.orm.SugarRecord
+import mehdi.sakout.fancybuttons.FancyButton
 import org.livinggoods.exam.R
 import org.livinggoods.exam.model.Exam
 import org.livinggoods.exam.util.Constants
 
-class ExamListAdapter(context: Context, exams: MutableList<Exam>): BaseAdapter() {
+class ExamListAdapter(internal var context: Context, internal var exams: MutableList<Exam>, internal var listener: OnExamListItemClicked): BaseAdapter() {
 
-    var context: Context
-    var exams: MutableList<Exam>
     var inflater: LayoutInflater
 
     init {
@@ -50,10 +50,15 @@ class ExamListAdapter(context: Context, exams: MutableList<Exam>): BaseAdapter()
 
         val tvExamStatus = view.findViewById<TextView>(R.id.tv_exam_status)
         tvExamStatus.text = exam.localExamStatus!!.toUpperCase()
+        val btnStartExam = view.findViewById<FancyButton>(R.id.btn_start_exam)
+        btnStartExam.setOnClickListener{ listener.startExam(exam) }
         if (exam.localExamStatus == Constants.EXAM_STATUS_DONE) {
             tvExamStatus.setTextColor(Color.GREEN)
+            btnStartExam.visibility = View.GONE
+
         } else {
             tvExamStatus.setTextColor(Color.RED)
+            btnStartExam.visibility = View.VISIBLE
         }
 
         return view
@@ -65,4 +70,7 @@ class ExamListAdapter(context: Context, exams: MutableList<Exam>): BaseAdapter()
         notifyDataSetChanged()
     }
 
+    interface OnExamListItemClicked {
+        fun startExam(exam: Exam)
+    }
 }

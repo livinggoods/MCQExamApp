@@ -1,5 +1,7 @@
 package org.livinggoods.exam.persistence
 
+import android.accounts.AccountManager
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,6 +10,7 @@ import com.orm.SugarRecord
 import org.livinggoods.exam.R
 import org.livinggoods.exam.activity.InitialSetupActivity
 import org.livinggoods.exam.model.*
+import org.livinggoods.exam.service.ExamSyncServiceAdapter
 
 class SessionManager(internal var _context: Context) {
 
@@ -71,6 +74,12 @@ class SessionManager(internal var _context: Context) {
         }
 
     fun reset() {
+
+        val currentAccount = ExamSyncServiceAdapter.getSyncAccount(_context)
+
+        val accountManager = AccountManager.get(_context)
+        accountManager.removeAccount(currentAccount, null, null)
+
         editor.clear()
         editor.commit()
 

@@ -34,6 +34,9 @@ object APIClient {
         logging.level = HttpLoggingInterceptor.Level.BODY
 
         val httpClient = OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(logging)
                 .addInterceptor(provideOfflineCacheInterceptor(context))
                 .addNetworkInterceptor(provideCacheInterceptor(context))

@@ -9,6 +9,11 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/menu_sync_exams"
+        android:title="Sync Exams"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_settings"
         android:title="Settings"
         app:showAsAction="never"/>

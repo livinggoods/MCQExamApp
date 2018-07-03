@@ -16,9 +16,9 @@ open class BaseActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    fun showConnectionError(call: Call<ResponseBody>, t: Throwable) {
+    fun showConnectionError(call: Call<ResponseBody>?, t: Throwable?) {
 
-        t.printStackTrace()
+        t!!.printStackTrace()
 
         var error = ""
 

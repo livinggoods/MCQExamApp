@@ -81,6 +81,12 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
             progressDialog.dismiss()
     }
 
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onClick(v: View?) {
         // Save exams
         // Save Training
@@ -97,11 +103,11 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
             return
         }
 
-        if (examsList.size == 0) {
+        /*if (examsList.size == 0) {
             Toast.makeText(this@InitialSetupActivity, getString(R.string.no_exams_available), Toast.LENGTH_LONG)
                     .show()
             return
-        }
+        }*/
 
         val details = HashMap<String, String>()
         details.put(SessionManager.KEY_TRAINING_JSON, gson.toJson(training))
@@ -295,7 +301,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
             override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                 progressDialog.dismiss()
 
-                showConnectionError(call!!, t!!)
+                showConnectionError(call, t)
             }
         })
     }

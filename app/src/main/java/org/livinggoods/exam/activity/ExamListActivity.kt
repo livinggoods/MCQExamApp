@@ -44,7 +44,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ExamListActivity : BaseActivity() {
+class ExamListActivity : BaseActivity(), ExamListAdapter.OnExamListItemClicked {
 
     lateinit var lvExams: ListView
     lateinit var adapter: ExamListAdapter
@@ -55,7 +55,6 @@ class ExamListActivity : BaseActivity() {
     lateinit var trainee: Trainee
     lateinit var training: Training
     lateinit var gson: Gson
-    lateinit var btnRefresh: FancyButton
 
     var registered: Boolean = false
     var isSyncTriggeredManually = false
@@ -109,7 +108,7 @@ class ExamListActivity : BaseActivity() {
 
         lvExams = findViewById<ListView>(R.id.lv_exams)
         val examList = getExamList()
-        adapter = ExamListAdapter(this, examList!!)
+        adapter = ExamListAdapter(this, examList!!, this@ExamListActivity)
         lvExams.adapter = adapter
 
         tvPendingRecords = findViewById(R.id.tv_pending_records) as TextView
@@ -125,64 +124,6 @@ class ExamListActivity : BaseActivity() {
         tvTrainee.text = trainee.registration?.name
         tvTraining.text = training.trainingName
         tvPendingRecords.text = SugarRecord.count<Answer>(Answer::class.java, "", arrayOf()).toString()
-
-        btnRefresh = findViewById<FancyButton>(R.id.btn_refresh)
-        btnRefresh.setOnClickListener { getExams() }
-
-        lvExams.setOnItemClickListener { parent, view, position, id ->
-            val exam = adapter.getItem(position) as Exam
-
-            if (exam.localExamStatus != Constants.EXAM_STATUS_PENDING) {
-                Toast.makeText(this@ExamListActivity, getString(R.string.cannot_retake_exam), Toast.LENGTH_LONG)
-                        .show()
-                return@setOnItemClickListener
-            }
-
-            val dpi = this@ExamListActivity.getResources().getDisplayMetrics().density
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Enter Exam Unlock Code")
-            val input = EditText(this)
-            input.hint = "e.g 4321"
-            input.inputType = InputType.TYPE_CLASS_NUMBER
-
-            builder.setPositiveButton("OK", object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-
-                    val unlockCode = input.text.toString()
-
-                    if (unlockCode.trim().isBlank()) {
-                        input.error = "Invalid Input"
-                        return
-                    }
-
-                    input.error = null
-
-                    if (unlockCode.toInt() == exam.unlockCode) {
-                        val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
-                        intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this@ExamListActivity, "Wrong unlock code. Please try again", Toast.LENGTH_LONG)
-                                .show()
-                    }
-
-                    dialog?.dismiss()
-                }
-            })
-            builder.setNegativeButton("CANCEL", object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    dialog?.dismiss()
-                }
-
-            })
-
-            val dialog = builder.create()
-            dialog.setView(input, (19*dpi).toInt(), (5*dpi).toInt(), (14*dpi).toInt(), (5*dpi).toInt())
-
-            dialog.show()
-
-            input.requestFocus()
-        }
 
         supportActionBar?.title = getString(R.string.title_available_exams)
 
@@ -262,8 +203,67 @@ class ExamListActivity : BaseActivity() {
                 true
             }
 
+            R.id.menu_sync_exams -> {
+                getExams()
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun startExam(exam: Exam) {
+
+        if (exam.localExamStatus != Constants.EXAM_STATUS_PENDING) {
+            Toast.makeText(this@ExamListActivity, getString(R.string.cannot_retake_exam), Toast.LENGTH_LONG)
+                    .show()
+            return
+        }
+
+        val dpi = this@ExamListActivity.getResources().getDisplayMetrics().density
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Enter Exam Unlock Code")
+        val input = EditText(this)
+        input.hint = "e.g 4321"
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+
+        builder.setPositiveButton("OK", object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+
+                val unlockCode = input.text.toString()
+
+                if (unlockCode.trim().isBlank()) {
+                    input.error = "Invalid Input"
+                    return
+                }
+
+                input.error = null
+
+                if (unlockCode.toInt() == exam.unlockCode) {
+                    val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
+                    intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this@ExamListActivity, "Wrong unlock code. Please try again", Toast.LENGTH_LONG)
+                            .show()
+                }
+
+                dialog?.dismiss()
+            }
+        })
+        builder.setNegativeButton("CANCEL", object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                dialog?.dismiss()
+            }
+
+        })
+
+        val dialog = builder.create()
+        dialog.setView(input, (19*dpi).toInt(), (5*dpi).toInt(), (14*dpi).toInt(), (5*dpi).toInt())
+
+        dialog.show()
+
+        input.requestFocus()
     }
 
     fun getExamList(): MutableList<Exam>? {
