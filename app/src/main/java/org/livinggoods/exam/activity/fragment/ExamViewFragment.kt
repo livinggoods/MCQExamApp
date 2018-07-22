@@ -1,5 +1,6 @@
 package org.livinggoods.exam.activity.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -107,6 +108,10 @@ class ExamViewFragment : Fragment() {
 
             Log.e("STATUS", "${status}, $message")
 
+
+            val parent = activity as TakeExamActivity
+            val isOther = parent.isOtherApp
+
             if (!status) {
                 mListener!!.onShowError(message)
                 return
@@ -123,15 +128,24 @@ class ExamViewFragment : Fragment() {
                         val answers = gson.fromJson<MutableList<Answer>>(data, listType)
                         answers.forEach { answer -> answer.save() }
 
-                        // TODO: Update this at some point
-                        val exam = mListener?.getExamJSON()!!
-                        exam.localExamStatus = Constants.EXAM_STATUS_DONE
-                        exam.save()
+                        if (isOther) {
+                            val intent = Intent()
+                            intent.action = "org.livinggoods.exam.ACTION_TAKE_EXAM"
+                            intent.putExtra("results", data)
+                            activity!!.setResult(Activity.RESULT_OK, intent)
+                            activity!!.finish()
+                        } else {
 
-                        val intent = Intent(TakeExamActivity.ACTION_EXAM_DONE)
-                        context!!.sendBroadcast(intent)
+                            // TODO: Update this at some point
+                            val exam = mListener?.getExamJSON()!!
+                            exam.localExamStatus = Constants.EXAM_STATUS_DONE
+                            exam.save()
 
-                        activity!!.finish()
+                            val intent = Intent(TakeExamActivity.ACTION_EXAM_DONE)
+                            context!!.sendBroadcast(intent)
+
+                            activity!!.finish()
+                        }
                     },
                     getString(R.string.confirm),
                     DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() },

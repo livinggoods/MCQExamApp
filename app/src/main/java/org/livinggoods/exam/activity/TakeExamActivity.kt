@@ -23,11 +23,15 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
 
     lateinit var exam: Exam
     lateinit var gson: Gson
+    var isOtherApp: Boolean = false
 
 
     companion object {
         val KEY_FORM_ID = "form_id"
-
+        val KEY_OTHER_APP = "other_app"
+        val KEY_EXAM_JSON = "exam_json"
+        val KEY_TRAINING_ID = "training_id"
+        val KEY_TRAINEE_ID = "trainee_id"
         val ACTION_EXAM_DONE = "exam_done"
     }
 
@@ -46,7 +50,22 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
         }
 
         val formId = bundle.getLong(KEY_FORM_ID)
-        exam = SugarRecord.findById(Exam::class.java, formId)
+        if (bundle.containsKey(KEY_OTHER_APP)) {
+            isOtherApp = bundle.getBoolean(KEY_OTHER_APP);
+        }
+
+        if (isOtherApp) {
+
+            val json = bundle.getString(KEY_EXAM_JSON)
+            val traineeId = bundle.getString(KEY_TRAINEE_ID)
+            val trainingId = bundle.getString(KEY_TRAINING_ID)
+
+            exam = gson.fromJson(json, Exam::class.java)
+            exam.traineeId = traineeId
+
+        } else {
+            exam = SugarRecord.findById(Exam::class.java, formId)
+        }
         val actionbar = supportActionBar
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true)
@@ -100,6 +119,8 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
 
     override fun getExamJSON(): Exam {
 
+        if (isOtherApp) return exam
+
         val examId = exam.id
 
         val questions = SugarRecord.find(Question::class.java, "LOCAL_EXAM_ID=?", examId.toString())
@@ -118,6 +139,5 @@ class TakeExamActivity : BaseActivity(), ExamViewFragment.OnFragmentInteractionL
         exam.questions = questions
 
         return exam
-
     }
 }
