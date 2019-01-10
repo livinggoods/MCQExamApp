@@ -41,13 +41,13 @@ class Training {
     var id: String? = null
     @SerializedName("lat")
     @Expose
-    var lat: Int? = null
+    var lat: Double? = null
     @SerializedName("location_id")
     @Expose
     var locationId: Any? = null
     @SerializedName("lon")
     @Expose
-    var lon: Int? = null
+    var lon: Double? = null
     @SerializedName("parish_id")
     @Expose
     var parishId: Any? = null
