@@ -3,8 +3,14 @@ package org.livinggoods.exam.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.orm.SugarRecord
+import java.util.UUID
 
 class Answer(): SugarRecord<Answer>() {
+
+
+    @SerializedName ("id")
+    @Expose
+    val answerId = UUID.randomUUID().toString()
 
     @SerializedName("training_exam_id")
     @Expose
@@ -41,6 +47,6 @@ class Answer(): SugarRecord<Answer>() {
 
     override fun toString(): String {
 
-        return "${trainingExamId}-${traineeId}-${questionId}-${questionScore}-${answer}"
+        return "${answerId}-${trainingExamId}-${traineeId}-${questionId}-${questionScore}-${answer}"
     }
 }
