@@ -17,6 +17,7 @@
     <string name="cancel">CANCEL</string>
     <string name="retry">RETRY</string>
 
+    <string name="select_country">Select Country</string>
     <string name="select_training">Select Training</string>
     <string name="select_trainee">Select Trainee</string>
     <string name="status">Status</string>
@@ -25,9 +26,12 @@
     <string name="available_exams">Available Exams</string>
     <string name="cache_offline">CACHE OFFLINE</string>
     <string name="check_internet_connection">Please check your internet connection</string>
+    <string name="loading_countries">Loading Countries ...</string>
     <string name="loading_trainings">Loading Trainings ...</string>
     <string name="loading_trainees">Loading Trainees ...</string>
     <string name="loading_exams">Loading Exams ...</string>
+
+    <string name="no_country_selected">No country Selected</string>
     <string name="no_training_selected">No Training Selected</string>
     <string name="no_trainee_selected">No Trainee Selected</string>
     <string name="no_exams_available">No Exams Available</string>

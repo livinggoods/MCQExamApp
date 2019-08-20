@@ -8,7 +8,7 @@ import retrofit2.http.*
 interface API {
 
     @GET("sync/trainings")
-    fun getTrainings(): Call<ResponseBody>
+    fun getTrainings(@Query("country") country: String): Call<ResponseBody>
 
     @GET("sync/{training_id}/trainees")
     fun getTrainees(@Path(value = "training_id", encoded = true) trainingId: String): Call<ResponseBody>
