@@ -15,10 +15,7 @@ import mehdi.sakout.fancybuttons.FancyButton
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import org.livinggoods.exam.R
-import org.livinggoods.exam.model.Exam
-import org.livinggoods.exam.model.Question
-import org.livinggoods.exam.model.Trainee
-import org.livinggoods.exam.model.Training
+import org.livinggoods.exam.model.*
 import org.livinggoods.exam.network.API
 import org.livinggoods.exam.network.APIClient
 import org.livinggoods.exam.persistence.SessionManager
@@ -31,6 +28,7 @@ import retrofit2.Response
 class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     lateinit var btnCacheOffline: Button
+    lateinit var spCountry: Spinner
     lateinit var spTraining: Spinner
     lateinit var spTrainee: Spinner
     lateinit var tvAvailableExams: TextView
@@ -44,6 +42,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
     lateinit var examsList: MutableList<Exam>
     lateinit var session: SessionManager
 
+    var country: String? = null
     var training: Training? = null
     var trainee: Trainee? = null
 
@@ -61,6 +60,10 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
         btnCacheOffline = findViewById<Button>(R.id.btn_cache_offline)
 
+        //country spinner
+        spCountry = findViewById<Spinner>(R.id.sp_country)
+        spCountry.onItemSelectedListener = this@InitialSetupActivity
+
         spTraining = findViewById<Spinner>(R.id.sp_training)
         spTraining.onItemSelectedListener = this@InitialSetupActivity
 
@@ -71,7 +74,6 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
         btnCacheOffline.setOnClickListener(this@InitialSetupActivity)
 
-        getTrainings()
     }
 
     override fun onStop() {
@@ -87,6 +89,9 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Action handler for save button
+     */
     override fun onClick(v: View?) {
         // Save exams
         // Save Training
@@ -147,6 +152,8 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
         when (parent?.id) {
+            spCountry.id -> onCountrySelected(parent!!, position, id)
+
             spTraining.id -> onTrainingSelected(parent!!, position, id)
 
             spTrainee.id -> onTraineeSelected(parent!!, position, id)
@@ -155,6 +162,12 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
                 // Do Nothing
             }
         }
+    }
+
+
+    private fun onCountrySelected(parent: AdapterView<*>, position: Int, id: Long) {
+        country = spCountry.selectedItem.toString()
+        getTrainings()
     }
 
     private fun onTrainingSelected(parent: AdapterView<*>, position: Int, id: Long) {
@@ -177,13 +190,15 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
     private fun getTrainings() {
 
+        if (country == null) return
+
         progressDialog.isIndeterminate = true
         progressDialog.setMessage(getString(R.string.loading_trainings))
         progressDialog.setCancelable(false)
         progressDialog.show()
 
         val api = APIClient.getClient(this@InitialSetupActivity).create(API::class.java)
-        val call = api.getTrainings()
+        val call = api.getTrainings(country!!)
         call.enqueue(object: Callback<ResponseBody> {
 
             override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
@@ -218,7 +233,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
     }
 
     private fun getTrainees() {
-        if (training == null) return
+        if (country == null || training == null) return
 
         val trainingId = training?.id!!
 
@@ -266,7 +281,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
     private fun getExams() {
 
-        if (training == null || trainee == null) return
+        if (country == null || training == null || trainee == null) return
 
         val trainingId = training?.id!!
 

@@ -14,17 +14,32 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!--Added country spinner -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_country" />
+
+        <Spinner
+            android:id="@+id/sp_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/countries"
+            android:layout_marginBottom="8dp"/>
+
+        <!--end country spinner -->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/select_training" />
 
-        <Spinner
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/sp_training"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -32,10 +47,12 @@
             android:layout_marginTop="16dp"
             android:text="@string/select_trainee" />
 
-        <Spinner
+
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/sp_trainees"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            />
 
         <TextView
             android:layout_width="match_parent"
