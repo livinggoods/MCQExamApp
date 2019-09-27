@@ -29,7 +29,8 @@
 									rv-id="choice.id"
 									rv-value="choice.id"
 									rv-on-change="controller.inputChange"
-									class="question-input">
+									class="question-input"
+									rv-checked="question.choice | equals choice.question_choice">
 
 							<label rv-for="choice.id" rv-text="choice.question_choice" class="question-label"></label>
 						</div>

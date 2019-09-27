@@ -30,6 +30,7 @@ class SessionManager(internal var _context: Context) {
         val KEY_TRAINEE_JSON = "config_trainee_json"
         val KEY_CLOUD_ENDPOINT = "config_cloud_endpoint"
         val KEY_TRAINERS_IP = "config_trainer_ip"
+        val KEY_ONGOING_EXAM = "on_going_exam"
     }
 
 
@@ -46,6 +47,24 @@ class SessionManager(internal var _context: Context) {
             editor.putBoolean(IS_SET_UP, value)
             editor.commit()
         }
+
+    /**
+     * {
+     *     exam_id: <>
+     *     answers: [{...}]
+     * }
+     *
+     */
+    fun getCachedExam(examId: String): String {
+        val key = "${KEY_ONGOING_EXAM}_${examId}"
+        return pref.getString(key, "")
+    }
+
+    fun cacheOngoingExam(examId: String, examJson: String) {
+        val key = "${KEY_ONGOING_EXAM}_${examId}"
+        editor.putString(key, examJson)
+        editor.commit()
+    }
 
     var sessionDetails: HashMap<String, String>
         get() {
@@ -72,6 +91,11 @@ class SessionManager(internal var _context: Context) {
         get() {
             return pref.getString(KEY_CLOUD_ENDPOINT, _context.getString(R.string.config_api_endpoint_default))
         }
+
+    fun removeKey(key: String) {
+        editor.remove(key)
+        editor.commit()
+    }
 
     fun reset() {
 

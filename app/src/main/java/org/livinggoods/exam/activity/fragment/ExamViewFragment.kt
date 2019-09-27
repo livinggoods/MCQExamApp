@@ -16,9 +16,11 @@ import android.webkit.WebViewClient
 import com.google.gson.Gson
 import org.livinggoods.exam.R
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.fragment_exam_view.*
 import org.livinggoods.exam.activity.TakeExamActivity
 import org.livinggoods.exam.model.Answer
 import org.livinggoods.exam.model.Exam
+import org.livinggoods.exam.persistence.SessionManager
 import org.livinggoods.exam.util.Constants
 import org.livinggoods.exam.util.UtilFunctions
 
@@ -28,6 +30,7 @@ class ExamViewFragment : Fragment() {
 
     public lateinit var webView: WebView
     lateinit var gson: Gson
+    lateinit var sessionManager: SessionManager
 
     companion object {
 
@@ -44,6 +47,7 @@ class ExamViewFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         gson = UtilFunctions.getGsonSerializer()
+        sessionManager = SessionManager(activity!!)
 
         if (arguments != null) {
 
@@ -54,7 +58,7 @@ class ExamViewFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_exam_view, container, false)
 
-        webView = rootView.findViewById(R.id.webview)
+        webView = rootView.findViewById<WebView>(R.id.webview)
         webView.addJavascriptInterface(WebInterface(context!!), "Android")
         webView.isHorizontalScrollBarEnabled = false
         val webSettings = webView.settings
@@ -73,6 +77,12 @@ class ExamViewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+    }
+
+    override fun onPause() {
+        Log.e("Chromium", "Triggered pause")
+        webview.loadUrl("javascript:onPause()")
+        super.onPause()
     }
 
     override fun onAttach(context: Context?) {
@@ -99,15 +109,24 @@ class ExamViewFragment : Fragment() {
     private inner class WebInterface(internal var mContext: Context) {
 
         @JavascriptInterface
+        fun onPause(examJSON: String) {
+            val exam = mListener?.getExamJSON()!!
+            sessionManager.cacheOngoingExam(exam.examId.toString(), examJSON)
+        }
+
+        @JavascriptInterface
         fun getExam(): String {
-            return  gson.toJson(mListener?.getExamJSON(), Exam::class.java)
+            val exam = mListener?.getExamJSON()!!
+            val cachedExam = sessionManager.getCachedExam(exam.examId!!.toString())
+            if (cachedExam.isBlank()) {
+                return  gson.toJson(mListener?.getExamJSON(), Exam::class.java)
+            } else {
+                return cachedExam
+            }
         }
 
         @JavascriptInterface
         fun submitAnswers(status: Boolean, message: String, data: String, totalMarks: Int, isPassed: Boolean) {
-
-            Log.e("STATUS", "${status}, $message")
-
 
             val parent = activity as TakeExamActivity
             val isOther = parent.isOtherApp
@@ -133,6 +152,7 @@ class ExamViewFragment : Fragment() {
                             intent.action = "org.livinggoods.exam.ACTION_TAKE_EXAM"
                             intent.putExtra("results", data)
                             activity!!.setResult(Activity.RESULT_OK, intent)
+                            sessionManager.removeKey(mListener?.getExamJSON()!!.examId.toString())
                             activity!!.finish()
                         } else {
 
@@ -140,10 +160,9 @@ class ExamViewFragment : Fragment() {
                             val exam = mListener?.getExamJSON()!!
                             exam.localExamStatus = Constants.EXAM_STATUS_DONE
                             exam.save()
-
                             val intent = Intent(TakeExamActivity.ACTION_EXAM_DONE)
                             context!!.sendBroadcast(intent)
-
+                            sessionManager.removeKey(exam.examId.toString())
                             activity!!.finish()
                         }
                     },

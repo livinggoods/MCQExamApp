@@ -14,32 +14,65 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!--Added country spinner -->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/select_country" />
 
-        <Spinner
-            android:id="@+id/sp_country"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/countries"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
 
-        <!--end country spinner -->
+            <Spinner
+                android:id="@+id/sp_country"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/countries"
+                android:layout_weight="60"
+                android:layout_gravity="center_vertical"/>
+
+
+            <Button
+                android:id="@+id/btn_get_trainings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="GET TRAININGS"
+                android:layout_weight="40"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/select_training" />
 
-        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-            android:id="@+id/sp_training"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:orientation="horizontal">
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp_training"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="60"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/btn_get_trainees"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="GET TRAINEES"
+                android:layout_weight="40"
+                android:enabled="false"
+                />
+
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="match_parent"
@@ -48,11 +81,31 @@
             android:text="@string/select_trainee" />
 
 
-        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-            android:id="@+id/sp_trainees"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:orientation="horizontal">
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp_trainees"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="60"
+                android:layout_gravity="center_vertical"
+                />
+
+            <Button
+                android:id="@+id/btn_get_exams"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="GET EXAMS"
+                android:layout_weight="40"
+                android:enabled="false"
+                />
+
+        </LinearLayout>
+
+
 
         <TextView
             android:layout_width="match_parent"
@@ -72,7 +125,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/cache_offline" />
+            android:text="@string/cache_offline"
+            android:enabled="false"/>
 
 
     </LinearLayout>

@@ -28,6 +28,9 @@ import retrofit2.Response
 class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     lateinit var btnCacheOffline: Button
+    lateinit var btnGetTrainings: Button
+    lateinit var btnGetTrainees: Button
+    lateinit var btnGetExams: Button
     lateinit var spCountry: Spinner
     lateinit var spTraining: Spinner
     lateinit var spTrainee: Spinner
@@ -59,6 +62,9 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
         session = SessionManager(this@InitialSetupActivity)
 
         btnCacheOffline = findViewById<Button>(R.id.btn_cache_offline)
+        btnGetTrainings = findViewById<Button>(R.id.btn_get_trainings)
+        btnGetTrainees = findViewById<Button>(R.id.btn_get_trainees)
+        btnGetExams = findViewById<Button>(R.id.btn_get_exams)
 
         //country spinner
         spCountry = findViewById<Spinner>(R.id.sp_country)
@@ -73,6 +79,9 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
         tvAvailableExams = findViewById<TextView>(R.id.tv_available_exams)
 
         btnCacheOffline.setOnClickListener(this@InitialSetupActivity)
+        btnGetTrainings.setOnClickListener { onCountrySelected() }
+        btnGetTrainees.setOnClickListener { onTrainingSelected() }
+        btnGetExams.setOnClickListener { onTraineeSelected() }
 
     }
 
@@ -152,11 +161,29 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
         when (parent?.id) {
-            spCountry.id -> onCountrySelected(parent!!, position, id)
+            spCountry.id -> {
+                spTraining.isEnabled = false
+                spTraining.adapter = null
+                spTrainee.isEnabled = false
+                spTrainee.adapter = null
+                btnGetTrainees.isEnabled =  false
+                btnGetExams.isEnabled = false
+                btnCacheOffline.isEnabled = false
+                tvAvailableExams.visibility = View.INVISIBLE
+            }
 
-            spTraining.id -> onTrainingSelected(parent!!, position, id)
+            spTraining.id -> {
+                spTrainee.isEnabled = false
+                spTrainee.adapter = null
+                btnGetExams.isEnabled = false
+                btnCacheOffline.isEnabled = false
+                tvAvailableExams.visibility = View.INVISIBLE
+            }
 
-            spTrainee.id -> onTraineeSelected(parent!!, position, id)
+            spTrainee.id -> {
+                btnCacheOffline.isEnabled = false
+                tvAvailableExams.visibility = View.INVISIBLE
+            }
 
             else -> {
                 // Do Nothing
@@ -165,12 +192,13 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
     }
 
 
-    private fun onCountrySelected(parent: AdapterView<*>, position: Int, id: Long) {
+    private fun onCountrySelected() {
         country = spCountry.selectedItem.toString()
         getTrainings()
     }
 
-    private fun onTrainingSelected(parent: AdapterView<*>, position: Int, id: Long) {
+    private fun onTrainingSelected() {
+        val position = spTraining.selectedItemPosition
         if (trainingList.size == 0) {
             training = null
             return
@@ -179,7 +207,8 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
         getTrainees()
     }
 
-    private fun onTraineeSelected(parent: AdapterView<*>, position: Int, id: Long) {
+    private fun onTraineeSelected() {
+        val position = spTrainee.selectedItemPosition
         if (traineeList.size == 0) {
             trainee = null
             return
@@ -218,6 +247,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spTraining.adapter = adapter
                     spTraining.isEnabled = true
+                    btnGetTrainees.isEnabled = true
 
                 } catch (e: Exception) {
                     onFailure(call, e.cause)
@@ -263,6 +293,7 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spTrainee.adapter = adapter
                     spTrainee.isEnabled = true
+                    btnGetExams.isEnabled = true
 
                 } catch (e: Exception) {
                     onFailure(call, e.cause)
@@ -305,8 +336,10 @@ class InitialSetupActivity : BaseActivity(), View.OnClickListener, AdapterView.O
 
                     val listType = object: TypeToken<ArrayList<Exam>>() {}.type
                     examsList = gson.fromJson<MutableList<Exam>>(exams.toString(), listType)
+                    tvAvailableExams.visibility = View.VISIBLE
                     tvAvailableExams.text = examsList.size.toString()
                     tvAvailableExams.isEnabled = true
+                    btnCacheOffline.isEnabled = true
 
                 } catch (e: Exception) {
                     onFailure(call, e.cause)

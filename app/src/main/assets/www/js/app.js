@@ -8,10 +8,10 @@ var ExamApp = (function ($, rivets, _) {
 
             exam.questions = _.map(exam.questions, function (item, index) {
                 return $.extend(true, item, {
-                    choiceSelected: false,
-                    choiceIdSelected: null,
+                    choiceSelected: item.choiceSelected ? item.choiceSelected : false,
+                    choiceIdSelected: item.choiceIdSelected !== null ? item.choiceIdSelected : null,
                     invalidChoice: false,
-                    isAnswerCorrect: false,
+                    isAnswerCorrect: item.isAnswerCorrect ? item.isAnswerCorrect : false,
                     errorMessage: "Please make selection",
                     number: index + 1
                 })
@@ -108,4 +108,8 @@ function submit() {
         results.totalMarks,
         results.passed
     );
+}
+
+function onPause() {
+    Android.onPause(JSON.stringify(ExamApp.exam));
 }
