@@ -43,6 +43,7 @@
     <string name="title_settings">Settings</string>
     <string name="pending_count" formatted="false">%d pending records</string>
     <string name="title_pending_records">Pending Records</string>
+    <string name="title_video_player">Video Player</string>
 
     <string name="generic_error">An error has occurred. Please try again later</string>
     <string name="connection_timed_out">Please check your Internet Connection</string>

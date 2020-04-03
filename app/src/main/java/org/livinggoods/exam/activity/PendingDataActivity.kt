@@ -1,6 +1,5 @@
 package org.livinggoods.exam.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ListView
@@ -9,10 +8,10 @@ import com.orm.SugarRecord
 import org.livinggoods.exam.R
 import org.livinggoods.exam.model.Answer
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 
 
-
-class PendingDataActivity : AppCompatActivity() {
+class PendingDataActivity : BaseActivity() {
 
     lateinit var tvPending: TextView
     lateinit var lvPending: ListView

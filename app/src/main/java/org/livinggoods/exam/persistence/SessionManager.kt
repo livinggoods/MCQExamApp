@@ -89,7 +89,8 @@ class SessionManager(internal var _context: Context) {
 
     val cloudEndpoint: String
         get() {
-            return pref.getString(KEY_CLOUD_ENDPOINT, _context.getString(R.string.config_api_endpoint_default))
+            //return pref.getString(KEY_CLOUD_ENDPOINT, _context.getString(R.string.config_api_endpoint_default))
+            return "http://192.168.100.23:5000/api/v1/";
         }
 
     fun removeKey(key: String) {

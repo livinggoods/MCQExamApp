@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import org.livinggoods.exam.R
 import com.google.gson.reflect.TypeToken
@@ -85,7 +85,7 @@ class ExamViewFragment : Fragment() {
         super.onPause()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             mListener = context

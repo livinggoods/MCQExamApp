@@ -53,4 +53,8 @@ class Exam(): SugarRecord<Exam>() {
     @Expose
     var traineeId: String? = null
 
+    @SerializedName("video_url")
+    @Expose
+    var videoUrl: String? = null
+
 }
