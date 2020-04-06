@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.content.ContextCompat
 import android.text.InputType
 import android.util.Log
 import android.view.Menu
@@ -17,12 +16,14 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.orm.SugarRecord
 import com.vistrav.ask.Ask
 import com.vistrav.ask.annotations.AskDenied
 import com.vistrav.ask.annotations.AskGranted
+import kotlinx.android.synthetic.main.activity_exam_list.*
 import mehdi.sakout.fancybuttons.FancyButton
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -129,6 +130,12 @@ class ExamListActivity : BaseActivity(), ExamListAdapter.OnExamListItemClicked {
 
         registerReceiver(examDoneReceiver, IntentFilter(TakeExamActivity.ACTION_EXAM_DONE))
         registered = true
+
+        button.setOnClickListener {
+            val intent = Intent(this@ExamListActivity, VideoPlayerActivity::class.java)
+            intent.putExtra(VideoPlayerActivity.KEY_VIDEO_URL, "http://www.papytane.com/mp4/noel2016.mp4")
+            startActivity(intent)
+        }
     }
 
 
