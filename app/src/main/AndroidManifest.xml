@@ -68,6 +68,7 @@
         <activity
             android:name=".activity.VideoPlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:screenOrientation="landscape"
             android:label="Video Player"/>
 
         <!--Services-->
