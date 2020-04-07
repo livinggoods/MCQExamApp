@@ -5,8 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -42,10 +45,12 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
     private var isPlayed = false
 
     lateinit var mediaUrl: String
+    var examId: Long = -1
     private var playerState: Int? = -1
     private var shouldAutoPlay: Boolean = false
     private var resumeWindow: Int = 0
     private var resumePosition: Long = 0
+
 
     companion object {
         val KEY_VIDEO_URL = "video_url"
@@ -56,15 +61,37 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
 
         setContentView(R.layout.activity_video_player)
 
-        val actionbar = supportActionBar
-        if (actionbar != null) {
-            actionbar.setDisplayHomeAsUpEnabled(true)
-        }
-
         if (intent.hasExtra(KEY_VIDEO_URL)) {
             mediaUrl = intent.getStringExtra(KEY_VIDEO_URL)
         } else {
             Toast.makeText(this, "Video URL not provided", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
+
+        if (!intent.hasExtra(TakeExamActivity.KEY_FORM_ID)) {
+            Toast.makeText(this, "Invalid form ID specified.", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
+
+        examId = intent.extras?.getLong(TakeExamActivity.KEY_FORM_ID)!!
+        layout_complete_video.visibility = View.GONE
+        btn_next.setOnClickListener {
+            val intent = Intent(this@VideoPlayerActivity, TakeExamActivity::class.java)
+            intent.putExtra(
+                TakeExamActivity.KEY_FORM_ID,
+                examId
+            )
+            startActivity(intent)
+        }
+
+        btn_replay.setOnClickListener {
+            if (player != null) {
+                player?.seekTo(0)
+            }
+
+            layout_complete_video.visibility = View.GONE
         }
     }
 
@@ -75,8 +102,7 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
             initializePlayer()
         }
 
-
-            playVideoFile()
+        playVideoFile()
 
     }
 
@@ -140,7 +166,11 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
             val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
             val loadControl = DefaultLoadControl()
 
-            player = ExoPlayerFactory.newSimpleInstance(this@VideoPlayerActivity, trackSelector, loadControl)
+            player = ExoPlayerFactory.newSimpleInstance(
+                this@VideoPlayerActivity,
+                trackSelector,
+                loadControl
+            )
             exo_player_view.player = player as SimpleExoPlayer
 
             player?.addListener(this@VideoPlayerActivity)
@@ -154,9 +184,9 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
             if (player == null) initializePlayer()
 
             val dataSourceFactory =
-                    DefaultHttpDataSourceFactory(Util.getUserAgent(this, getString(R.string.app_name)));
+                DefaultHttpDataSourceFactory(Util.getUserAgent(this, getString(R.string.app_name)));
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(mediaUrl))
+                .createMediaSource(Uri.parse(mediaUrl))
 
             player?.prepare(mediaSource)
         }
@@ -193,7 +223,9 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
 
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-
+        if (playbackState == Player.STATE_ENDED) {
+            layout_complete_video.visibility = View.VISIBLE
+        }
     }
 
     /**
