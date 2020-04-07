@@ -130,12 +130,6 @@ class ExamListActivity : BaseActivity(), ExamListAdapter.OnExamListItemClicked {
 
         registerReceiver(examDoneReceiver, IntentFilter(TakeExamActivity.ACTION_EXAM_DONE))
         registered = true
-
-        button.setOnClickListener {
-            val intent = Intent(this@ExamListActivity, VideoPlayerActivity::class.java)
-            intent.putExtra(VideoPlayerActivity.KEY_VIDEO_URL, "http://www.papytane.com/mp4/noel2016.mp4")
-            startActivity(intent)
-        }
     }
 
 
@@ -247,9 +241,18 @@ class ExamListActivity : BaseActivity(), ExamListAdapter.OnExamListItemClicked {
                 input.error = null
 
                 if (unlockCode.toInt() == exam.unlockCode) {
-                    val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
-                    intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
-                    startActivity(intent)
+
+                    if (exam.videoUrl != null && exam.videoUrl != "") {
+                        val intent = Intent(this@ExamListActivity, VideoPlayerActivity::class.java)
+                        intent.putExtra(VideoPlayerActivity.KEY_VIDEO_URL, exam.videoUrl)
+                        intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this@ExamListActivity, TakeExamActivity::class.java)
+                        intent.putExtra(TakeExamActivity.KEY_FORM_ID, exam.id)
+                        startActivity(intent)
+                    }
+
                 } else {
                     Toast.makeText(this@ExamListActivity, "Wrong unlock code. Please try again", Toast.LENGTH_LONG)
                             .show()
