@@ -84,6 +84,7 @@ class VideoPlayerActivity : BaseActivity(), Player.EventListener {
                 examId
             )
             startActivity(intent)
+            finish()
         }
 
         btn_replay.setOnClickListener {
